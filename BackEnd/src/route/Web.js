@@ -1,9 +1,7 @@
 import express from "express";
-import upload from "../config/Upload";
-import ImageUploadController from "../controllers/ImageUploadController";
 import AuthController from "../controllers/AuthController";
 import UserController from "../controllers/UserController";
-import AdminController from "../controllers/AdminController";
+
 
 const router = express.Router();
 
@@ -20,6 +18,7 @@ const initWebRoutes = (app) => {
     app.get('/wishlist', [AuthController.authenticateUser], UserController.getAllWishListByUser);
     app.post('/wishlist', [AuthController.authenticateUser], UserController.addWishList);
     app.delete('/wishlist/:productID', [AuthController.authenticateUser], UserController.deleteWishList);
+
     return app.use("/", router);
 }
 

@@ -12,7 +12,43 @@ const getProduct = async (productId) => {
     }
 };
 
+const addProduct = async (data) => {
+    const { title, image, brand_id, price, quantity, description } = data;
+    const query = 'INSERT INTO products (title, image, brand_id, price, quantity, description) VALUES (?, ?, ?, ?, ?, ?)';
+    const connection = createConnection();
 
+    try {
+        const [result] = await connection.promise().query(query, [title, image, brand_id, price, quantity, description]);
+        return result.insertId;
+    } finally {
+        connection.end();
+    }
+};
+
+const updateProduct = async (id, data) => {
+    const { title, image, price, quantity, description } = data;
+    const query = 'UPDATE products SET title=?, image=?, price=?, quantity=?, description=? WHERE id=?';
+    const connection = createConnection();
+
+    try {
+        const [result] = await connection.promise().query(query, [title, image, price, quantity, description, id]);
+        return result.affectedRows > 0;
+    } finally {
+        connection.end();
+    }
+};
+
+const deleteProduct = async (id) => {
+    const query = 'DELETE FROM products WHERE id=?';
+    const connection = createConnection();
+
+    try {
+        const [result] = await connection.promise().query(query, [id]);
+        return result.affectedRows > 0;
+    } finally {
+        connection.end();
+    }
+};
 
 const getAllProducts = async () => {
     const query = 'SELECT * FROM products';
@@ -52,6 +88,9 @@ const getCountProducts = async () => {
 
 module.exports = {
     getProduct,
+    addProduct,
+    updateProduct,
+    deleteProduct,
     getAllProducts,
     getCountProducts,
     getAllProductsByBrand
