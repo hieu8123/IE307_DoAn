@@ -1,10 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const colors = {
-    primary: "#FB6831",
-    primary_light: "#FFC8B2",
-    primary_shadow: "#FB6A04",
-    secondary: "#31C4FB",
+    primary: "#3AAFB9",
+    primary_light: "#6ED8E7",
+    primary_shadow: "#086E80",
+    secondary: "#FB6831",
     tertiary: "#AEE8FD",
     success: "#90ee90",
     danger: "#FF4848",
