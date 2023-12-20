@@ -1,29 +1,40 @@
 import { StyleSheet, Image, View } from "react-native";
-import React, { useCallback, useEffect } from "react";
-import logo from "../../assets/logo/logo_white.png";
-import { colors, getAuthUser, setAuthUser } from "../../until";
+import React, { useEffect } from "react";
+import { colors, getAuthUser, splashImages } from "../../until";
+import { useState } from "react";
 
 const Splash = ({ navigation }) => {
-  const retrieveData = useCallback(async () => {
-    const user = await getAuthUser();
-    if (user !== null) {
-      setTimeout(() => {
-        navigation.replace(user.role === "ROLE_ADMIN" ? "dashboard" : "tab");
-      }, 2000);
-    } else {
-      setTimeout(() => {
-        navigation.replace("login");
-      }, 2000);
-    }
-  });
-
+  const [splashIndex, setSplashIndex] = useState(0);
   useEffect(() => {
+    const loadSplashImages = async () => {
+      for (let index = 0; index < splashImages.length; index++) {
+        setSplashIndex(index);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    };
+
+    const retrieveData = async () => {
+      await loadSplashImages();
+
+      const user = await getAuthUser();
+
+      if (user !== null) {
+        setTimeout(() => {
+          navigation.replace(user.role === 'ROLE_ADMIN' ? 'dashboard' : 'tab');
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          navigation.replace('login');
+        }, 2000);
+      }
+    };
+
     retrieveData();
-  }, [retrieveData]);
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} source={logo} />
+      <Image style={styles.logo} source={splashImages[splashIndex].image} />
     </View>
   );
 };
