@@ -85,6 +85,30 @@ const getCountOrders = async () => {
     }
 };
 
+const updateOrderCode = async (id, code) => {
+    const query = 'UPDATE orders SET code=? where id=?';
+    const connection = createConnection();
+
+    try {
+        const [result] = await connection.promise().query(query, [code, id]);
+        return result.affectedRows > 0;
+    } finally {
+        connection.end();
+    }
+}
+
+const getOrderByCode = async (user_id, code) => {
+    const query = 'SELECT * FROM orders WHERE user_id=? AND code = ?';
+    const connection = createConnection();
+
+    try {
+        const [rows] = await connection.promise().query(query, [user_id, code]);
+        return rows[0];
+    } finally {
+        connection.end();
+    }
+};
+
 module.exports = {
     getAllOrdersByUser,
     deleteAllOrdersByUser,
@@ -92,5 +116,7 @@ module.exports = {
     updateOrderAmount,
     addOrder,
     getAllOrders,
-    getCountOrders
+    getCountOrders,
+    updateOrderCode,
+    getOrderByCode
 };

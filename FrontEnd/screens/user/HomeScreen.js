@@ -45,28 +45,28 @@ const HomeScreen = ({ navigation, route }) => {
     actionAddCartItem(product);
   });
 
-  const fetchProducts = useCallback( async() => {
-    const {products: productDatas = null, message = null} = await UserService.getAllProducts();
-    if(productDatas){
+  const fetchProducts = useCallback(async () => {
+    const { products: productDatas = null, message = null } = await UserService.getAllProducts();
+    if (productDatas) {
       setProducts(productDatas);
       const searchPayload = productDatas.map((product) => {
         return { name: product.title, ...product };
       });
       setSearchItems(searchPayload);
-    }else{
-      if(message == 'jwt expired') logout(navigation);
+    } else {
+      if (message == 'jwt expired') logout(navigation);
     }
   });
-  const fetchBrands = useCallback( async() => {
-    const {brands: brandDatas = null, message = null} = await UserService.getAllBrands();
-    if(brandDatas){
+  const fetchBrands = useCallback(async () => {
+    const { brands: brandDatas = null, message = null } = await UserService.getAllBrands();
+    if (brandDatas) {
       setBrands(brandDatas);
-    }else{
-      if(message == 'jwt expired') logout(navigation);
+    } else {
+      if (message == 'jwt expired') logout(navigation);
     }
   });
   //method call on pull refresh
-  const handleOnRefresh = useCallback( async() => {
+  const handleOnRefresh = useCallback(async () => {
     setRefreshing(true);
     await fetchProducts();
     await fetchBrands();
@@ -100,14 +100,14 @@ const HomeScreen = ({ navigation, route }) => {
           ) : (
             <></>
           )}
-          <Icon name="shopping-cart" type="font-awesome-5" size={30} color={colors.secondary}/>
+          <Icon name="shopping-cart" type="font-awesome-5" size={30} color={colors.secondary} />
         </TouchableOpacity>
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.searchContainer}>
           <View style={styles.inputContainer}>
             <SearchableDropdown
-              onTextChange={(text) => {}}
+              onTextChange={(text) => { }}
               onItemSelect={(item) => handleProductPress(item)}
               defaultIndex={0}
               containerStyle={{
@@ -146,9 +146,9 @@ const HomeScreen = ({ navigation, route }) => {
             />
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.scanButton}>
+            <TouchableOpacity style={styles.scanButton} onPress={() => navigation.navigate("scanner")}>
               <Text style={styles.scanButtonText}>Scan</Text>
-              <Icon name="line-scan" type="material-community" size={20} color={'white'}/>
+              <Icon name="line-scan" type="material-community" size={20} color={'white'} />
             </TouchableOpacity>
           </View>
         </View>
@@ -184,7 +184,7 @@ const HomeScreen = ({ navigation, route }) => {
                   <CustomIconButton
                     key={index}
                     text={item.name}
-                    image={{uri: `${network.serverip}${item.image}`}}
+                    image={{ uri: `${network.serverip}${item.image}` }}
                     onPress={() =>
                       navigation.jumpTo("brands", { brandSelected: item })
                     }
@@ -223,7 +223,7 @@ const HomeScreen = ({ navigation, route }) => {
                     style={{ marginLeft: 5, marginBottom: 10, marginRight: 5 }}
                   >
                     <ProductCard
-                      name={item.name}
+                      name={item.title}
                       image={`${network.serverip}${item.image}`}
                       price={item.price}
                       quantity={item.quantity}
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 10,
   },
-  bannerContainer:{
+  bannerContainer: {
     padding: 10,
   },
   bannerImage: {

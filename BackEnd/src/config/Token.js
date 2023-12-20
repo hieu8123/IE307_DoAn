@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 const secretKey = '21520372-21522070';
 
 const generateJwtToken = (username) => {
-    return jwt.sign({ username }, secretKey, {expiresIn: '24h'});
+    return jwt.sign({ username }, secretKey);
 };
 
 const decodeJwtToken = (token) => {

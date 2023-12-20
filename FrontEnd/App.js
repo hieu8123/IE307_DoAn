@@ -1,11 +1,12 @@
 import { Provider } from 'react-redux';
 import store from './store';
-import { View } from 'react-native';
+import Routes from './routes/Routes';
+import NetworkStatusAlert from './components/NetworkStatusAlert';
 export default function App() {
   return (
     <Provider store={store}>
       <NetworkStatusAlert>
-        <View>app</View>
+        <Routes />
       </NetworkStatusAlert>
     </Provider>
   );
