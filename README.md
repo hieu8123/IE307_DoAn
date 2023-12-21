@@ -26,7 +26,7 @@
 To clone this repo, type the following command
 
 ```
-git clone https://github.com/UsamaSarwar/reactnative-ecommerce-charlie.git
+git clone https://github.com/hieu8123/IE307_DoAn.git
 ```
 
 ### `Node Package Manager`
