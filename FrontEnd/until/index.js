@@ -7,5 +7,6 @@ export {
     getTime,
     dateFormat,
     banners,
-    splashImages
+    splashImages,
+    timeoutHandler
 } from "./until";

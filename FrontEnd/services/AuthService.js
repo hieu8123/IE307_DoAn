@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAuthUser, network } from '../until';
+import { getAuthUser, network, timeoutHandler } from '../until';
 
 const login = async ({ username, password }) => {
   try {
@@ -27,6 +27,7 @@ const signup = async ({ username, password, email }) => {
 
     return response.data;
   } catch (error) {
+    console.log(error.response)
     return { message: error.response ? error.response.data.message : 'Unknown error' };
   }
 };

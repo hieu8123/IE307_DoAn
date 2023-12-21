@@ -97,6 +97,7 @@ const ViewBrandScreen = ({ navigation, route }) => {
     fetchBrands();
   }, []);
 
+
   return (
     <View style={styles.container}>
       <CustomProgressBar visible={isloading} label={'Loading...'} />

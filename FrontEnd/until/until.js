@@ -4,6 +4,18 @@ export const splashImages = [
     {
         image: require("../assets/logo/logo.png")
     },
+    {
+        image: require("../assets/logo/logo_75.png")
+    },
+    {
+        image: require("../assets/logo/logo_50.png")
+    },
+    {
+        image: require("../assets/logo/logo_75.png")
+    },
+    {
+        image: require("../assets/logo/logo.png")
+    },
 ]
 
 export const colors = {
@@ -24,7 +36,7 @@ export const colors = {
 };
 
 export const network = {
-    serverip: "http://10.0.22.17:8080",
+    serverip: "http://192.168.1.109:8080",
 };
 
 export const getAuthUser = async () => {
@@ -90,3 +102,14 @@ export const getTime = (date) => {
     }
     return time.join("");
 }
+
+export const timeoutHandler = async (promise) => {
+    const timeoutDuration = 5000;
+    const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => {
+            reject(new Error('Request timeout'));
+        }, timeoutDuration);
+    });
+
+    return Promise.race([promise, timeoutPromise]);
+};

@@ -100,7 +100,7 @@ const AddProductScreen = ({ navigation, route }) => {
         });
         if (data) {
           setIsloading(false);
-          navigation.navigate('viewproduct');
+          navigation.navigate('viewproducts');
           setError("");
         } else {
           setIsloading(false);

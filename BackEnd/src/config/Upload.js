@@ -2,12 +2,12 @@ import multer from "multer";
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        if(req.path === '/admin/product/upload-image'){
+        if (req.path === '/admin/product/upload-image') {
             cb(null, 'public/products/');
-        }else if(req.path === '/admin/brand/upload-image'){
-            cb(null, 'public/products/');
-        }else{
-            cb(null,null);
+        } else if (req.path === '/admin/brand/upload-image') {
+            cb(null, 'public/brands/');
+        } else {
+            cb(null, null);
         }
     },
     filename: (req, file, cb) => {

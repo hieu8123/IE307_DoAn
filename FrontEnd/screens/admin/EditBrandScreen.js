@@ -93,7 +93,7 @@ const EditBrandScreen = ({ navigation, route }) => {
           }}
         >
           <Icon
-            name="arrow-back-circle-outline"
+            name="arrow-back"
             size={30}
             color={colors.muted}
           />

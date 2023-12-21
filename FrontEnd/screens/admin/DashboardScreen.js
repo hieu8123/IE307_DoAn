@@ -47,7 +47,7 @@ const DashboardScreen = ({ navigation, route }) => {
           value: ListDashBoard.productsCount,
           iconName: "md-square",
           type: "warning",
-          screenName: "viewproduct",
+          screenName: "viewproducts",
         },
         {
           id: 4,
@@ -138,7 +138,7 @@ const DashboardScreen = ({ navigation, route }) => {
             text={"Products"}
             iconName={"md-square"}
             onPress={() =>
-              navigation.navigate("viewproduct")
+              navigation.navigate("viewproducts")
             }
             onPressSecondary={() =>
               navigation.navigate("addproduct")

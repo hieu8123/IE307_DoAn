@@ -152,6 +152,13 @@ const deleteProduct = async (req, res) => {
     try {
         const { productID } = req.params;
         const orderDetails = await OrderDetailService.getOrderDetailByProductId(productID);
+        const product = await ProductService.getProduct(productID);
+
+        fs.unlink(`${path.join(__dirname, '../../public/products/')}${product.image}`, (err) => {
+            if (err) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+        });
         for (const orderDetail of orderDetails) {
             const order = await OrderService.getOrder(orderDetail.order_id);
             await OrderService.updateOrderAmount(orderDetail.order_id, order.amount - orderDetail.price * orderDetail.quantity);
@@ -211,6 +218,7 @@ const updateBrand = async (req, res) => {
                 if (err) {
                     return res.status(404).json({ message: 'Brand not found' });
                 }
+                console.log(err)
             });
         }
 
@@ -230,6 +238,12 @@ const deleteBrand = async (req, res) => {
     try {
         const { brandID } = req.params;
         const products = await ProductService.getAllProductsByBrand(brandID);
+        const brand = await BrandService.getBrand(brandID);
+        fs.unlink(`${path.join(__dirname, '../../public/brands/')}${brand.image}`, (err) => {
+            if (err) {
+                return res.status(404).json({ message: 'Brand not found' });
+            }
+        });
 
         for (const product of products) {
             const orderDetails = await OrderDetailService.getOrderDetailByProductId(product.id);
