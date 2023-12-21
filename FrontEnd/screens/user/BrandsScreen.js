@@ -119,7 +119,7 @@ const BrandsScreen = ({ navigation, route }) => {
           ) : (
             <></>
           )}
-          <Icon name="shopping-cart" type="font-awesome-5" size={30} color={colors.secondary}/>
+          <Icon name="shopping-cart" type="font-awesome-5" size={30} color={colors.secondary} />
         </TouchableOpacity>
       </View>
       <View style={styles.bodyContainer}>

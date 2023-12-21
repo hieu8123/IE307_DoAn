@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontWeight: "bold",
     color: "#fff",
+    fontSize: 30,
   },
   containerDisabled: {
     padding: 15,

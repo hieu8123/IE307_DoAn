@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 5,
   },
-  textContainer:{
+  textContainer: {
     width: 120,
   },
   secondaryTextSm: {
@@ -93,10 +93,10 @@ const styles = StyleSheet.create({
   primaryTextSm: {
     fontSize: 15,
     fontWeight: "bold",
-    color: colors.primary,
+    color: colors.secondary,
   },
   iconContainer: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.secondary,
     width: 30,
     height: 30,
     borderRadius: 5,

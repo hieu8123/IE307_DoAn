@@ -13,10 +13,10 @@ export const splashImages = [
 ]
 
 export const colors = {
-    primary: "#FB6831",
+    primary: "#31B0FB",
     primary_light: "#FFC8B2",
-    primary_shadow: "#FB6A04",
-    secondary: "#31C4FB",
+    primary_shadow: "#04A1FB",
+    secondary: "#fc7b03",
     tertiary: "#AEE8FD",
     success: "#90ee90",
     danger: "#FF4848",
@@ -30,7 +30,7 @@ export const colors = {
 };
 
 export const network = {
-    serverip: "http://192.168.1.102:8080",
+    serverip: "http://10.0.22.17:8080",
 };
 
 export const getAuthUser = async () => {

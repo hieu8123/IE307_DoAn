@@ -18,7 +18,7 @@ const CartProductList = ({
     return (
       <View style={styles.deleteButtonContainer}>
         <TouchableOpacity onPress={handleDelete}>
-          <Icon name="delete" type="material-community" size={50} color={colors.primary} />
+          <Icon name="delete" type="material-community" size={50} color={colors.secondary} />
         </TouchableOpacity>
       </View>
     );
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     fontSize: 15,
-    color: colors.primary,
+    color: colors.secondary,
   },
   deleteButtonContainer: {
     flexDirection: "row",
