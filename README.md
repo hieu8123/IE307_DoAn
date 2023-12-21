@@ -70,21 +70,24 @@ Install dependencies on folder frontend and backend of project
 5. **Step 5:** Edit `network` on `FrontEnd\until\until.js` by your ip address.
 
 6. **Step 6:** Run app
+
    * Run app by this command in folder `frontend` anh `backend`:
      ```bash
         npm start
     ```
-### Account available
-1. **Admin**
-  * Username: `admin`.
     
-  * Password: `123456`:
+### Account available
+
+1. **Admin**
+      * Username: `admin`.
+    
+      * Password: `123456`:
 
 3. **User** .
 
-  * Username: `user2`.
+      * Username: `user2`.
     
-  * Password: `123456`:
+      * Password: `123456`:
     
 
 
