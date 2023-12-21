@@ -2,10 +2,18 @@ import { StyleSheet, Image, View } from "react-native";
 import React, { useEffect } from "react";
 import { colors, getAuthUser, splashImages } from "../../until";
 import { useState } from "react";
+import * as Speech from 'expo-speech';
 
 const Splash = ({ navigation }) => {
   const [splashIndex, setSplashIndex] = useState(0);
   useEffect(() => {
+    const speechOptions = {
+      language: 'en-US',
+      rate: 1.0,
+      pitch: 1.0
+    };
+
+    Speech.speak('Welcome To Ecommerce App', speechOptions);
     const loadSplashImages = async () => {
       for (let index = 0; index < splashImages.length; index++) {
         setSplashIndex(index);
