@@ -57,12 +57,12 @@ const SignupScreen = ({ navigation }) => {
       return setError("password does not match");
     }
 
-    const {user = null, message = null} = await AuthService.signup({username, password, email})
-    if(user){
+    const { user = null, message = null } = await AuthService.signup({ username, password, email })
+    if (user) {
       setIsLoading(false);
       setAuthUser(user);
       navigation.replace(user.role === "ROLE_ADMIN" ? "dashboard" : "tab");
-    }else{
+    } else {
       setIsLoading(false);
       setError(message);
     }
@@ -91,7 +91,7 @@ const SignupScreen = ({ navigation }) => {
           </View>
           <View>
             <Text style={styles.screenNameParagraph}>
-              Create your account on EasyBuy to get an access to millions of
+              Create your account on PaoShop to get an access to millions of
               products
             </Text>
           </View>

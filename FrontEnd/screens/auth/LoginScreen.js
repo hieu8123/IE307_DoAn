@@ -9,7 +9,7 @@ import {
 } from "react-native";
 
 import React, { useCallback, useState } from "react";
-import { colors, network, setAuthUser  } from "../../until";
+import { colors, network, setAuthUser } from "../../until";
 import CustomInput from "../../components/CustomInput";
 import header_logo from "../../assets/logo/logo.png";
 import CustomButton from "../../components/CustomButton";
@@ -40,12 +40,12 @@ const LoginScreen = ({ navigation }) => {
       return setError("Password must be 6 characters long");
     }
 
-    const {user = null, message = null} = await AuthService.login({username, password})
-    if(user){
+    const { user = null, message = null } = await AuthService.login({ username, password })
+    if (user) {
       setIsLoading(false);
       setAuthUser(user);
       navigation.replace(user.role === "ROLE_ADMIN" ? "dashboard" : "tab");
-    }else{
+    } else {
       setIsLoading(false);
       setError(message);
     }
@@ -58,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
         <StatusBar></StatusBar>
         <View style={styles.welconeContainer}>
           <View>
-            <Text style={styles.welcomeText}>Welcome to EasyBuy</Text>
+            <Text style={styles.welcomeText}>Welcome to PaoShop</Text>
             <Text style={styles.welcomeParagraph}>
               make your ecommerce easy
             </Text>

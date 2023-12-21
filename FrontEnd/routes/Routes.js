@@ -42,7 +42,7 @@ const Routes = () => {
         <Stack.Screen name="mywishlist" component={MyWishlistScreen} />
         <Stack.Screen name="dashboard" component={DashboardScreen} />
         <Stack.Screen name="addproduct" component={AddProductScreen} />
-        <Stack.Screen name="viewproduct" component={ViewProductScreen} />
+        <Stack.Screen name="viewproducts" component={ViewProductScreen} />
         <Stack.Screen name="editproduct" component={EditProductScreen} />
         <Stack.Screen name="tab" component={Tabs} />
         <Stack.Screen name="cart" component={CartScreen} />
@@ -58,7 +58,7 @@ const Routes = () => {
         <Stack.Screen name="editbrands" component={EditBrandScreen} />
         <Stack.Screen name="viewusers" component={ViewUsersScreen} />
         <Stack.Screen name="brands" component={BrandsScreen} />
-        <Stack.Screen name="scanner" component={ScannerScreen} options={{headerShown: true}}/>
+        <Stack.Screen name="scanner" component={ScannerScreen} options={{ headerShown: true }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

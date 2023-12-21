@@ -87,7 +87,7 @@ const HomeScreen = ({ navigation, route }) => {
         </TouchableOpacity>
         <View style={styles.topbarlogoContainer}>
           <Image source={easybuylogo} style={styles.logo} />
-          <Text style={styles.toBarText}>EasyBuy</Text>
+          <Text style={styles.toBarText}>PaoShop</Text>
         </View>
         <TouchableOpacity
           style={styles.cartIconContainer}
