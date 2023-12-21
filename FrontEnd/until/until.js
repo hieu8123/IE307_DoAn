@@ -2,13 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const splashImages = [
     {
-        image: require("../assets/logo/logo_white.png")
-    },
-    {
         image: require("../assets/logo/logo.png")
-    },
-    {
-        image: require("../assets/logo/logo_white.png")
     },
 ]
 
