@@ -6,5 +6,6 @@ export {
     logout,
     getTime,
     dateFormat,
-    banners
+    banners,
+    splashImages
 } from "./until";

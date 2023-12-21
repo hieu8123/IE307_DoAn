@@ -156,5 +156,5 @@ module.exports = {
     isAdmin,
     authenticateUser,
     changePassword,
-    deleteUser
+    deleteUser,
 };

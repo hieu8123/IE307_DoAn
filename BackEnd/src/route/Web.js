@@ -14,8 +14,10 @@ const initWebRoutes = (app) => {
     app.delete('/user', [AuthController.authenticateUser], AuthController.deleteUser);
     app.put('/change-password', [AuthController.authenticateUser], AuthController.changePassword);
     app.get('/products', [AuthController.authenticateUser], UserController.getAllProducts);
+    app.post('/product-code', [AuthController.authenticateUser], UserController.getProductByCode);
     app.get('/brands', [AuthController.authenticateUser], UserController.getAllBrands);
     app.get('/orders', [AuthController.authenticateUser], UserController.getAllOrdersByUser);
+    app.post('/order-code', [AuthController.authenticateUser], UserController.getOrderByCode);
     app.post('/checkout', [AuthController.authenticateUser], UserController.checkOut);
     app.get('/wishlist', [AuthController.authenticateUser], UserController.getAllWishListByUser);
     app.post('/wishlist', [AuthController.authenticateUser], UserController.addWishList);

@@ -6,6 +6,7 @@ import UserService from '../services/UserService';
 import PathImage from '../config/PathImage';
 import fs from 'fs';
 import path from 'path';
+import bcrypt from 'bcrypt';
 
 const getDashBoard = async (req, res) => {
     try {
@@ -111,6 +112,10 @@ const addProduct = async (req, res) => {
     try {
         const { data } = req.body;
         const product = await ProductService.addProduct(data);
+        const saltRounds = 10;
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const code = bcrypt.hashSync(JSON.stringify(data), salt);
+        await ProductService.updateProductCode(product, code);
         res.status(200).json({ data: 'Product added successfully' });
     } catch (error) {
         console.error('Error adding product:', error);
@@ -127,9 +132,6 @@ const updateProduct = async (req, res) => {
             fs.unlink(`${path.join(__dirname, '../../public/products/')}${product.image}`, (err) => {
                 if (err) {
                     return res.status(404).json({ message: 'Product not found' });
-                }
-                else {
-                    console.log("\nDeleted file: " + PathImage + product.image);
                 }
             });
         }
@@ -209,7 +211,6 @@ const updateBrand = async (req, res) => {
                 if (err) {
                     return res.status(404).json({ message: 'Brand not found' });
                 }
-                console.log("\nDeleted file: " + path.join(__dirname, '../../public/brands/') + brand.image);
             });
         }
 

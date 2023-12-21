@@ -86,6 +86,30 @@ const getCountProducts = async () => {
     }
 };
 
+const updateProductCode = async (id, code) => {
+    const query = 'UPDATE products SET code=? where id=?';
+    const connection = createConnection();
+
+    try {
+        const [result] = await connection.promise().query(query, [code, id]);
+        return result.affectedRows > 0;
+    } finally {
+        connection.end();
+    }
+}
+
+const getProductByCode = async (code) => {
+    const query = 'SELECT * FROM products WHERE code = ?';
+    const connection = createConnection();
+
+    try {
+        const [rows] = await connection.promise().query(query, [code]);
+        return rows[0];
+    } finally {
+        connection.end();
+    }
+};
+
 module.exports = {
     getProduct,
     addProduct,
@@ -93,5 +117,7 @@ module.exports = {
     deleteProduct,
     getAllProducts,
     getCountProducts,
-    getAllProductsByBrand
+    getAllProductsByBrand,
+    updateProductCode,
+    getProductByCode
 };

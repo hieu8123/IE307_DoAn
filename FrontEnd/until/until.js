@@ -1,10 +1,22 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+export const splashImages = [
+    {
+        image: require("../assets/logo/logo_white.png")
+    },
+    {
+        image: require("../assets/logo/logo.png")
+    },
+    {
+        image: require("../assets/logo/logo_white.png")
+    },
+]
+
 export const colors = {
-    primary: "#3AAFB9",
-    primary_light: "#6ED8E7",
-    primary_shadow: "#086E80",
-    secondary: "#FB6831",
+    primary: "#FB6831",
+    primary_light: "#FFC8B2",
+    primary_shadow: "#FB6A04",
+    secondary: "#31C4FB",
     tertiary: "#AEE8FD",
     success: "#90ee90",
     danger: "#FF4848",
