@@ -81,13 +81,13 @@ Install dependencies on folder frontend and backend of project
 1. **Admin**
       * Username: `admin`.
     
-      * Password: `123456`:
+      * Password: `123456`.
 
 3. **User** .
 
       * Username: `user2`.
     
-      * Password: `123456`:
+      * Password: `123456`.
     
 
 
