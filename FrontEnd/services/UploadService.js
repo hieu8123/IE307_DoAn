@@ -24,7 +24,7 @@ const uploadImageBrand = async (file) => {
             return result;
         })
         .catch((error) => {
-            return { message: error.response?.data?.message || error };
+            return { message: error.response? error.response.data.message : error };
         });
 };
 
@@ -52,7 +52,7 @@ const uploadImageProduct = async (file) => {
             return result;
         })
         .catch((error) => {
-            return { message: error.response?.data.message || error };
+            return { message: error.response? error.response.data.message : error };
         });
 };
 

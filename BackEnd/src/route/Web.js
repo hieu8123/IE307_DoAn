@@ -11,6 +11,7 @@ const initWebRoutes = (app) => {
     //user
     app.post('/login', AuthController.login);
     app.post('/signup', AuthController.signup);
+    app.post('/forget-password', AuthController.forgetPassword);
     app.delete('/user', [AuthController.authenticateUser], AuthController.deleteUser);
     app.put('/change-password', [AuthController.authenticateUser], AuthController.changePassword);
     app.get('/products', [AuthController.authenticateUser], UserController.getAllProducts);

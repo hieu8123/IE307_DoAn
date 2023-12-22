@@ -3,6 +3,8 @@ import UserService from '../services/UserService';
 import OrderService from '../services/OrderService';
 import OrderDetailService from '../services/OrderDetailService';
 import jwt from '../config/Token';
+import sendMail from '../config/SendMail';
+import generatePassword from '../config/GeneratePassword';
 
 const login = async (req, res) => {
     try {
@@ -129,6 +131,35 @@ const changePassword = async (req, res) => {
     }
 };
 
+const forgetPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const user = await UserService.getUserByEmail(email);
+        if (!user) {
+            return res.status(409).json({ message: 'Email not found' });
+        }
+
+        const newPassword = generatePassword();
+
+        const saltRounds = 10;
+        const salt = bcrypt.genSaltSync(saltRounds);
+        const newPassHash = bcrypt.hashSync(newPassword, salt);
+        await UserService.updateUserPassword(user.id, newPassHash);
+
+        const emailContent = `Hello, your new password is: ${newPassword}`;
+        sendMail({
+            email: user.email,
+            subject: "New Password",
+            message: emailContent,
+        });
+
+        res.status(200).json({ data: 'Password reset email sent successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 const deleteUser = async (req, res) => {
     try {
         const user = req.user;
@@ -157,4 +188,5 @@ module.exports = {
     authenticateUser,
     changePassword,
     deleteUser,
+    forgetPassword
 };

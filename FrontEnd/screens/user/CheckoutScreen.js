@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import BasicProductList from "../../components/BasicProductList/BasicProductList";
-import { colors } from "../../until";
+import { colors, getAddressFromLocation } from "../../until";
 import CustomButton from "../../components/CustomButton";
 import { useSelector, useDispatch } from "react-redux";
 import * as actionCreaters from "../../action/actions";
@@ -18,6 +18,7 @@ import CustomInput from "../../components/CustomInput";
 import CustomProgressBar from "../../components/CustomProgressBar";
 import { Icon } from "@rneui/themed";
 import { UserService } from "../../services";
+import * as Location from 'expo-location';
 
 const CheckoutScreen = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -34,7 +35,6 @@ const CheckoutScreen = ({ navigation, route }) => {
   const [streetAddress, setStreetAddress] = useState("");
   const [zipcode, setZipcode] = useState("");
 
-  //method to handle checkout
   const handleCheckout = async () => {
     setIsloading(true);
     var payload = [];
@@ -87,6 +87,23 @@ const CheckoutScreen = ({ navigation, route }) => {
         return accumulator + object.price * object.quantity;
       }, 0)
     );
+    (async () => {
+
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync({});
+      const locationName = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      });
+      const addressData = getAddressFromLocation(locationName[0]);
+      setCountry(addressData.country);
+      setCity(addressData.city);
+      setStreetAddress(addressData.streetAddress);
+      setZipcode(addressData.zipcode);
+    })();
   }, []);
 
   return (
