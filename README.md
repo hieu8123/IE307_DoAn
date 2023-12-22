@@ -42,13 +42,13 @@
 
 3. **Step 3:** Install dependencies.
 
-Install dependencies on folder frontend and backend of project
-
+    Install dependencies on folder frontend and backend of project
+   
     ```bash
     npm install
     ```
 
-4. **Step 4:** Set up Database.
+5. **Step 4:** Set up Database.
 
     * Turn on Apache and MySQL on XAMPP
 
@@ -67,9 +67,9 @@ Install dependencies on folder frontend and backend of project
     database: 'ie307',
     ```
 
-5. **Step 5:** Edit `network` on `FrontEnd\until\until.js` by your ip address.
+6. **Step 5:** Edit `network` on `FrontEnd\until\until.js` by your ip address.
 
-6. **Step 6:** Run app
+7. **Step 6:** Run app
 
    * Run app by this command in folder `frontend` anh `backend`:
      
