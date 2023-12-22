@@ -12,7 +12,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { colors, network } from "../../until";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
-import CustomAlert from "../../components/CustomAlert/CustomAlert";
+import CustomAlert from "../../components/CustomAlert";
 import * as ImagePicker from "expo-image-picker";
 import CustomProgressBar from "../../components/CustomProgressBar";
 import { AdminService, UploadService } from "../../services";

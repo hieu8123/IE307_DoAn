@@ -14,7 +14,7 @@ const login = async ({ username, password }) => {
         message: 'Request timeout. Please check your internet connection and try again.',
       };
     } else {
-      return { message: error.response ? error.response.data.message : 'Unknown error' };
+      return { message: error.response ? error.response.data.message : (error.error ? error.error : error) };
     }
   }
 };
@@ -27,8 +27,7 @@ const signup = async ({ username, password, email }) => {
 
     return response.data;
   } catch (error) {
-    console.log(error.response)
-    return { message: error.response ? error.response.data.message : 'Unknown error' };
+    return { message: error.response ? error.response.data.message : (error.error ? error.error : error) };
   }
 };
 
@@ -47,7 +46,7 @@ const changePassword = async ({ currentPassword, newPassword }) => {
 
     return response.data;
   } catch (error) {
-    return { message: error.response.data.message };
+    return { message: error.response ? error.response.data.message : error };
   }
 };
 
@@ -68,9 +67,21 @@ const deleteUser = async () => {
   }
 }
 
+const forgetPassword = async ({ email }) => {
+  try {
+    const response = await timeoutHandler(
+      axios.post(`${network.serverip}/forget-password`, { email })
+    );
+    return response.data;
+  } catch (error) {
+    return { message: error.response ? error.response.data.message : (error.error ? error.error : error) };
+  }
+};
+
 export default AuthService = {
   login,
   signup,
   changePassword,
-  deleteUser
+  deleteUser,
+  forgetPassword
 };

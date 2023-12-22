@@ -9,13 +9,12 @@ import {
 } from "react-native";
 
 import React, { useCallback, useState } from "react";
-import { colors, network, setAuthUser } from "../../until";
+import { colors, setAuthUser } from "../../until";
 import CustomInput from "../../components/CustomInput";
 import header_logo from "../../assets/logo/logo.png";
 import CustomButton from "../../components/CustomButton";
-import CustomAlert from "../../components/CustomAlert/CustomAlert";
+import CustomAlert from "../../components/CustomAlert";
 import CustomProgressBar from "../../components/CustomProgressBar";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState("");

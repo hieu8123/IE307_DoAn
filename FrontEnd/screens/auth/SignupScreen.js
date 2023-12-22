@@ -13,7 +13,7 @@ import { colors, setAuthUser } from "../../until";
 import CustomInput from "../../components/CustomInput";
 import header_logo from "../../assets/logo/logo.png";
 import CustomButton from "../../components/CustomButton";
-import CustomAlert from "../../components/CustomAlert/CustomAlert";
+import CustomAlert from "../../components/CustomAlert";
 import CustomProgressBar from "../../components/CustomProgressBar";
 import { AuthService } from "../../services";
 import { Icon } from "@rneui/themed";

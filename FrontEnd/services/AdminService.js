@@ -12,7 +12,7 @@ const getDashBoard = async () => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 };
 
@@ -27,7 +27,7 @@ const getAllUser = async () => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 };
 
@@ -42,7 +42,7 @@ const getAllOrders = async () => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 };
 
@@ -58,7 +58,7 @@ const updateOrderStatus = async (orderId, status) => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 };
 
@@ -73,7 +73,7 @@ const getAllProducts = async () => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 };
 
@@ -89,7 +89,7 @@ const addProduct = async (data) =>{
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 }
 
@@ -105,7 +105,7 @@ const updateProduct = async (id, data) =>{
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 }
 
@@ -120,7 +120,7 @@ const deleteProduct = async (id) => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 };
 
@@ -135,7 +135,7 @@ const getAllBrands = async () => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 };
 
@@ -151,7 +151,7 @@ const addBrand = async (data) =>{
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 }
 
@@ -167,7 +167,7 @@ const updateBrand = async (id, data) =>{
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 }
 
@@ -182,7 +182,7 @@ const deleteBrand = async (id) => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response.data.message };
+        return { message: error.response? error.response.data.message : error };
     }
 };
 export default AdminService = {

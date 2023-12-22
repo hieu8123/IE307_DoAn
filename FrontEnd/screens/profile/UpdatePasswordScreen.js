@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 import { colors } from "../../until";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
-import CustomAlert from "../../components/CustomAlert/CustomAlert";
+import CustomAlert from "../../components/CustomAlert";
 import { AuthService } from "../../services";
 import { Icon } from "@rneui/themed";
 

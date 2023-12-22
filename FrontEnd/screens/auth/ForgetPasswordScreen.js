@@ -1,17 +1,50 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { colors } from "../../until";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import { Icon } from "@rneui/themed";
-
-const sendInstructionsHandle = () => {
-  //TODO: handle user verfication and mail password reset link
-};
+import AuthService from "../../services/AuthService";
+import CustomProgressBar from "../../components/CustomProgressBar/CustomProgressBar";
+import CustomAlert from "../../components/CustomAlert";
 
 const ForgetPasswordScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [alert, setAlert] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [alertType, setAlertType] = useState("error");
+
+  const handleForgetPassword = useCallback(async () => {
+    setIsLoading(true);
+    if (email == "") {
+      setIsLoading(false);
+      setAlertType("error");
+      return setAlert("Please enter your email");
+    }
+    if (!email.includes("@")) {
+      setIsLoading(false);
+      setAlertType("error");
+      return setAlert("Email is not valid");
+    }
+    if (email.length < 6) {
+      setIsLoading(false);
+      setAlertType("error");
+      return setAlert("Email is too short");
+    }
+    const { data = null, message = null } = await AuthService.forgetPassword({ email })
+    if (data) {
+      setIsLoading(false);
+      setAlertType("success");
+      setAlert(data);
+    } else {
+      setIsLoading(false);
+      setAlertType("error");
+      setAlert(message);
+    }
+  });
   return (
     <View style={styles.container}>
+      <CustomProgressBar visible={isLoading} label={"Send Mail..."} />
       <View style={styles.TopBarContainer}>
         <TouchableOpacity
           onPress={() => {
@@ -34,11 +67,18 @@ const ForgetPasswordScreen = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.formContainer}>
-        <CustomInput placeholder={"Enter your Email Address"} />
+        <CustomAlert message={alert} type={alertType} />
+        <CustomInput
+          value={email}
+          setValue={setEmail}
+          placeholder={"Enter your Email Address"}
+          placeholderTextColor={colors.muted}
+          radius={5}
+        />
       </View>
       <CustomButton
         text={"Send Instruction"}
-        onPress={sendInstructionsHandle}
+        onPress={handleForgetPassword}
         radius={5}
       />
     </View>

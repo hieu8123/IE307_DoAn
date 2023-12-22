@@ -8,5 +8,6 @@ export {
     dateFormat,
     banners,
     splashImages,
-    timeoutHandler
+    timeoutHandler,
+    getAddressFromLocation
 } from "./until";

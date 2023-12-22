@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors, getAuthUser } from "../../until";
-import CustomAlert from "../../components/CustomAlert/CustomAlert";
+import CustomAlert from "../../components/CustomAlert";
 import CustomProgressBar from "../../components/CustomProgressBar";
 import OrderList from "../../components/OrderList/OrderList";
 import { UserService } from "../../services";
