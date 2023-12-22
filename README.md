@@ -76,7 +76,6 @@ Install dependencies on folder frontend and backend of project
      ```bash
         npm start
     ```
-    
 ### Account available
 
 1. **Admin**
