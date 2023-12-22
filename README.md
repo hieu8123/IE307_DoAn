@@ -3,7 +3,6 @@
 
 ## Features :memo:
 
-- [x] Stack Naviagtion
 - [x] Splash Screen
 - [x] Login Screen
 - [x] Signup Screen
@@ -18,7 +17,7 @@
 - [x] Admin Edit Product
 - [x] Cart Screen
 - [x] Checkout Screen
-- [x] Scan product QR code
+- [x] Scan QR code
 
 ## How to Run App :white_check_mark:
 
