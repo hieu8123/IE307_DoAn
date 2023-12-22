@@ -62,9 +62,9 @@ Install dependencies on folder frontend and backend of project
     * If you give the database a different name, please edit the file `BackEnd\src\config\DBConnection.js`:
 
     ```bash
-        host: 'localhost',
-        user: 'root',
-        database: 'ie307',
+    host: 'localhost',
+    user: 'root',
+    database: 'ie307',
     ```
 
 5. **Step 5:** Edit `network` on `FrontEnd\until\until.js` by your ip address.
@@ -73,9 +73,9 @@ Install dependencies on folder frontend and backend of project
 
    * Run app by this command in folder `frontend` anh `backend`:
      
-     ```bash
-        npm start
-     ```
+   ```bash
+   npm start
+   ```
 ### Account available
 
 1. **Admin**
@@ -89,7 +89,3 @@ Install dependencies on folder frontend and backend of project
     
       * Password: `123456`.
     
-
-
-
-
