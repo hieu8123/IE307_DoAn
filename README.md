@@ -43,6 +43,7 @@
 3. **Step 3:** Install dependencies.
 
 Install dependencies on folder frontend and backend of project
+
     ```bash
     npm install
     ```
@@ -71,6 +72,7 @@ Install dependencies on folder frontend and backend of project
 6. **Step 6:** Run app
 
    * Run app by this command in folder `frontend` anh `backend`:
+     
      ```bash
         npm start
     ```
