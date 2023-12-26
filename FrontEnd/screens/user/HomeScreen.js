@@ -226,6 +226,8 @@ const HomeScreen = ({ navigation, route }) => {
                       name={item.title}
                       image={`${network.serverip}${item.image}`}
                       price={item.price}
+                      productCount={item.total_count}
+                      productRate={item.total_rating}
                       quantity={item.quantity}
                       onPress={() => handleProductPress(item)}
                       onPressSecondary={() => handleAddToCat(item)}

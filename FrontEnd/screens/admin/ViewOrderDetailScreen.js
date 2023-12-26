@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors, dateFormat } from "../../until";
@@ -27,7 +28,7 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
     { label: "Delivered", value: "delivered" },
   ]);
 
-  const handleUpdateStatus = useCallback(async(id) => {
+  const handleUpdateStatus = useCallback(async (id) => {
     setIsloading(true);
     const { data = null, message = null } = await AdminService.updateOrderStatus(id, value);
     if (data) {
@@ -126,20 +127,22 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
               Order on : {dateFormat(orderDetail?.updatedAt)}
             </Text>
           </View>
-          <ScrollView
+          <FlatList
             style={styles.orderSummaryContainer}
             nestedScrollEnabled={true}
-          >
-            {orderDetail.details.map((product, index) => (
+            data={orderDetail.details}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item, index }) => (
               <View key={index}>
                 <BasicProductList
-                  title={product?.productId?.title}
-                  price={product?.price}
-                  quantity={product?.quantity}
+                  title={item?.productId?.title}
+                  price={item?.price}
+                  quantity={item?.quantity}
                 />
               </View>
-            ))}
-          </ScrollView>
+            )}
+          />
+
           <View style={styles.orderItemContainer}>
             <Text style={styles.orderItemText}>Total</Text>
             <Text>{items.amount}$</Text>

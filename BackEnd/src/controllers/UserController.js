@@ -1,9 +1,12 @@
 import ProductService from '../services/ProductService';
+import ProductDetailService from '../services/ProductDetailService';
 import BrandService from '../services/BrandService';
 import OrderService from '../services/OrderService';
 import OrderDetailService from '../services/OrderDetailService';
+import ReviewService from '../services/ReviewService';
 import PathImage from '../config/PathImage';
 import WishListService from '../services/WishListService';
+import UserService from '../services/UserService';
 import bcrypt from 'bcrypt';
 
 const getAllBrands = async (req, res) => {
@@ -38,7 +41,6 @@ const getAllOrdersByUser = async (req, res) => {
                         return { ...detail, name: product.title };
                     })
                 );
-
                 return {
                     ...order,
                     details: detailsWithProduct,
@@ -80,11 +82,18 @@ const checkOut = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
     try {
+        const user = req.user;
         const products = await ProductService.getAllProducts();
-        const productsWithImagePath = products.map(product => ({
-            ...product,
-            image: PathImage.Products + product.image
+
+        const productsWithImagePath = await Promise.all(products.map(async (product) => {
+            const isBuy = await ProductService.checkIsBuyProduct(user.id, product.id);
+            return {
+                ...product,
+                image: PathImage.Products + product.image,
+                isBuy: isBuy,
+            };
         }));
+
         res.status(200).json({ products: productsWithImagePath });
     } catch (error) {
         console.error('Error getting products:', error);
@@ -156,6 +165,62 @@ const getProductByCode = async (req, res) => {
     }
 };
 
+const getProductDetail = async (req, res) => {
+    try {
+        const user = req.user;
+        const { productId } = req.params;
+        const productDetail = await ProductDetailService.getProductDetail(productId);
+        if (!productDetail) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json({ productDetail: productDetail });
+    } catch (error) {
+        console.error('Error in getProductDetail:', error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+const getProductReview = async (req, res) => {
+    try {
+        const user = req.user;
+        const { productId } = req.params;
+
+        const reviewsProduct = await ReviewService.getReviewsByProduct(productId);
+
+        const reviewsWithUsername = await Promise.all(reviewsProduct.map(async (review) => {
+            const user = await UserService.getUser(review.user_id);
+            return { ...review, username: user.username };
+        }));
+
+        res.status(200).json({ reviews: reviewsWithUsername });
+    } catch (error) {
+        console.error('Error in getProductReview:', error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
+const addProductReview = async (req, res) => {
+    try {
+        const user = req.user;
+        const { productId } = req.params;
+        const { data } = req.body;
+        console.log(req.body);
+        const reviewsProduct = await ReviewService.addReview(user.id, productId, data);
+        await ProductService.updateProductRating(productId);
+        if (!reviewsProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json({ data: "Add Reviews For Product Success" });
+    } catch (error) {
+        console.error('Error in addProductReview:', error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
+
 const getOrderByCode = async (req, res) => {
     try {
         const user = req.user;
@@ -183,7 +248,6 @@ const getOrderByCode = async (req, res) => {
 };
 
 
-
 module.exports = {
     getAllBrands,
     getAllOrdersByUser,
@@ -193,5 +257,8 @@ module.exports = {
     addWishList,
     deleteWishList,
     getProductByCode,
-    getOrderByCode
+    getProductDetail,
+    getOrderByCode,
+    getProductReview,
+    addProductReview
 };

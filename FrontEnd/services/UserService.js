@@ -93,6 +93,48 @@ const getProductByCode = async (code) => {
     }
 };
 
+const getProductDetail = async (productId) => {
+    try {
+        const user = await getAuthUser();
+        const response = await axios.get(`${network.serverip}/product-detail/${productId}`, {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return { message: error.response ? error.response.data.message : error };
+    }
+};
+
+const getProductReview = async (productId) => {
+    try {
+        const user = await getAuthUser();
+        const response = await axios.get(`${network.serverip}/product-review/${productId}`, {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return { message: error.response ? error.response.data.message : error };
+    }
+};
+
+const addProductReview = async (productId, data) => {
+    try {
+        const user = await getAuthUser();
+        const response = await axios.post(`${network.serverip}/product-review/${productId}`, { data }, {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return { message: error.response ? error.response.data.message : error };
+    }
+};
+
 const getWishListByUser = async () => {
     try {
         const user = await getAuthUser();
@@ -145,6 +187,9 @@ export default UserService = {
     getOrderByCode,
     checkOut,
     getAllProducts,
+    getProductDetail,
+    getProductReview,
+    addProductReview,
     getProductByCode,
     getWishListByUser,
     addWishList,

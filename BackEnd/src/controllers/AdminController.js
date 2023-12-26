@@ -1,8 +1,10 @@
 import ProductService from '../services/ProductService';
+import ProductDetailService from '../services/ProductDetailService';
 import BrandService from '../services/BrandService';
 import OrderService from '../services/OrderService';
 import OrderDetailService from '../services/OrderDetailService';
 import UserService from '../services/UserService';
+import ReviewService from '../services/ReviewService';
 import PathImage from '../config/PathImage';
 import fs from 'fs';
 import path from 'path';
@@ -87,35 +89,50 @@ const updateOrderStatus = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
     try {
-        const products = await ProductService.getAllProducts();
-        const brands = await BrandService.getAllBrands();
+        const [products, brands] = await Promise.all([
+            ProductService.getAllProducts(),
+            BrandService.getAllBrands()
+        ]);
 
-        const productsWithImagePath = await Promise.all(products.map(async (product) => {
+        const productsWithDetails = await Promise.all(products.map(async (product) => {
             const imagePath = PathImage.Products + product.image;
+
             const brand = brands.find(b => b.id === product.brand_id);
+
+            const productDetail = await ProductDetailService.getProductDetail(product.id);
 
             return {
                 ...product,
                 image: imagePath,
                 brand: brand.name,
+                detail: productDetail
             };
         }));
 
-        res.status(200).json({ products: productsWithImagePath });
+        res.status(200).json({ products: productsWithDetails });
     } catch (error) {
         console.error('Error getting products:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
 
+
 const addProduct = async (req, res) => {
     try {
         const { data } = req.body;
-        const product = await ProductService.addProduct(data);
+
+        const productData = { ...data, detail: undefined };
+        const productDetail = data.detail;
+        const product = await ProductService.addProduct(productData);
+
+        await ProductDetailService.addProductDetail(product, productDetail);
+
         const saltRounds = 10;
         const salt = bcrypt.genSaltSync(saltRounds);
         const code = bcrypt.hashSync(JSON.stringify(data), salt);
+
         await ProductService.updateProductCode(product, code);
+
         res.status(200).json({ data: 'Product added successfully' });
     } catch (error) {
         console.error('Error adding product:', error);
@@ -123,21 +140,30 @@ const addProduct = async (req, res) => {
     }
 };
 
+
 const updateProduct = async (req, res) => {
     try {
         const { productID } = req.params;
         const { data } = req.body;
-        const product = await ProductService.getProduct(productID);
-        if (product.image != data.image) {
-            fs.unlink(`${path.join(__dirname, '../../public/products/')}${product.image}`, (err) => {
+
+        const productData = { ...data, detail: undefined };
+        const productDetail = data.detail;
+        console.log(productDetail);
+        const existingProduct = await ProductService.getProduct(productID);
+
+        if (existingProduct.image !== productData.image) {
+            const imagePath = `${path.join(__dirname, '../../public/products/')}${existingProduct.image}`;
+            fs.unlink(imagePath, (err) => {
                 if (err) {
                     return res.status(404).json({ message: 'Product not found' });
                 }
             });
         }
 
-        const success = await ProductService.updateProduct(productID, data);
-        if (!success) {
+        const successProductUpdate = await ProductService.updateProduct(productID, productData);
+        const successDetailUpdate = await ProductDetailService.updateProductDetail(productID, productDetail);
+
+        if (!successProductUpdate || !successDetailUpdate) {
             return res.status(404).json({ message: 'Product not found' });
         }
 
@@ -148,22 +174,28 @@ const updateProduct = async (req, res) => {
     }
 };
 
+
 const deleteProduct = async (req, res) => {
     try {
         const { productID } = req.params;
         const orderDetails = await OrderDetailService.getOrderDetailByProductId(productID);
         const product = await ProductService.getProduct(productID);
 
-        fs.unlink(`${path.join(__dirname, '../../public/products/')}${product.image}`, (err) => {
+        const imagePath = `${path.join(__dirname, '../../public/products/')}${product.image}`;
+        fs.unlink(imagePath, (err) => {
             if (err) {
                 return res.status(404).json({ message: 'Product not found' });
             }
         });
+
         for (const orderDetail of orderDetails) {
             const order = await OrderService.getOrder(orderDetail.order_id);
             await OrderService.updateOrderAmount(orderDetail.order_id, order.amount - orderDetail.price * orderDetail.quantity);
         }
+
         await OrderDetailService.deleteOrderDetailByProductId(productID);
+        await ProductDetailService.deleteProductDetail(productID);
+        await ReviewService.deleteReviewByProduct(productID);
         const success = await ProductService.deleteProduct(productID);
 
         if (!success) {
@@ -171,12 +203,12 @@ const deleteProduct = async (req, res) => {
         }
 
         res.status(200).json({ data: 'Product deleted successfully' });
-
     } catch (error) {
         console.error('Error deleting product:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
 
 
 const getAllBrands = async (req, res) => {
@@ -252,8 +284,9 @@ const deleteBrand = async (req, res) => {
                 const order = await OrderService.getOrder(orderDetail.order_id);
                 await OrderService.updateOrderAmount(orderDetail.order_id, order.amount - orderDetail.price * orderDetail.quantity);
             }
-
             await OrderDetailService.deleteOrderDetailByProductId(product.id);
+            await ProductDetailService.deleteProductDetail(product.id);
+            await ReviewService.deleteReviewByProduct(product.id);
             await ProductService.deleteProduct(product.id);
         }
 

@@ -110,6 +110,47 @@ const getProductByCode = async (code) => {
     }
 };
 
+const checkIsBuyProduct = async (userId, productId) => {
+    const query = `
+        SELECT * FROM orders
+        JOIN order_details ON orders.id = order_details.order_id
+        WHERE orders.user_id = ? AND order_details.product_id = ?;
+    `;
+
+    const connection = createConnection();
+
+    try {
+        const [result] = await connection.promise().query(query, [userId, productId]);
+        return result.length > 0;
+    } finally {
+        connection.end();
+    }
+};
+
+const updateProductRating = async (productId) => {
+    const query = `
+    UPDATE products
+    SET total_rating = (
+        SELECT SUM(rating) FROM reviews WHERE product_id = ?
+    ), total_count = (
+        SELECT COUNT(*) FROM reviews WHERE product_id = ?
+    )
+    WHERE id = ?
+  `;
+
+  const values = [productId, productId, productId];
+
+  const connection = createConnection();
+
+  try {
+      const [result] = await connection.promise().query(query, values);
+      return result;
+  } finally {
+      connection.end();
+  }
+};
+
+
 module.exports = {
     getProduct,
     addProduct,
@@ -119,5 +160,8 @@ module.exports = {
     getCountProducts,
     getAllProductsByBrand,
     updateProductCode,
-    getProductByCode
+    getProductByCode,
+    checkIsBuyProduct,
+    checkIsBuyProduct,
+    updateProductRating
 };

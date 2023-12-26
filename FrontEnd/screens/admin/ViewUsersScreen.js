@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors } from "../../until";
@@ -92,26 +93,27 @@ const ViewUsersScreen = ({ navigation, route }) => {
         value={filterItem}
         setValue={setFilterItem}
       />
-      <ScrollView
+      <FlatList
         style={{ flex: 1, width: "100%" }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refeshing} onRefresh={handleOnRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={handleOnRefresh} />
         }
-      >
-        {foundItems && foundItems.length == 0 ? (
-          <Text>{`No user found with the name of ${filterItem}!`}</Text>
-        ) : (
-          foundItems.map((item) => (
-            <UserList
-              key={item.id}
-              username={item.username}
-              email={item.email}
-              role={item.role}
-            />
-          ))
+        data={foundItems}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <UserList
+            key={item.id}
+            username={item.username}
+            email={item.email}
+            role={item.role}
+          />
         )}
-      </ScrollView>
+        ListEmptyComponent={
+          <Text>{`No user found with the name of ${filterItem}!`}</Text>
+        }
+      />
+
     </View>
   );
 };
