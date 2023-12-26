@@ -12,7 +12,7 @@ const getAllBrands = async () => {
             });
         return response.data;
     } catch (error) {
-        return { message: error.response? error.response.data.message : error };
+        return { message: error.response ? error.response.data.message : error };
     }
 };
 
@@ -42,7 +42,7 @@ const getOrderByCode = async (code) => {
             });
         return response.data;
     } catch (error) {
-        return { message: error.response? error.response.data.message : error };
+        return { message: error.response ? error.response.data.message : error };
     }
 };
 
@@ -58,7 +58,7 @@ const checkOut = async (order) => {
             });
         return response.data;
     } catch (error) {
-        return { message: error.response? error.response.data.message : error };
+        return { message: error.response ? error.response.data.message : error };
     }
 };
 
@@ -73,7 +73,7 @@ const getAllProducts = async () => {
             });
         return response.data;
     } catch (error) {
-        return { message: error.response? error.response.data.message : error };
+        return { message: error.response ? error.response.data.message : error };
     }
 };
 
@@ -89,7 +89,21 @@ const getProductByCode = async (code) => {
             });
         return response.data;
     } catch (error) {
-        return { message: error.response? error.response.data.message : error };
+        return { message: error.response ? error.response.data.message : error };
+    }
+};
+
+const getProductById = async (productId) => {
+    try {
+        const user = await getAuthUser();
+        const response = await axios.get(`${network.serverip}/product/${productId}`, {
+            headers: {
+                Authorization: `Bearer ${user.token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return { message: error.response ? error.response.data.message : error };
     }
 };
 
@@ -145,7 +159,7 @@ const getWishListByUser = async () => {
         });
         return response.data;
     } catch (error) {
-        return { message: error.response? error.response.data.message : error };
+        return { message: error.response ? error.response.data.message : error };
     }
 };
 
@@ -161,7 +175,7 @@ const addWishList = async (product_id) => {
             });
         return response.data;
     } catch (error) {
-        return { message: error.response? error.response.data.message : error };
+        return { message: error.response ? error.response.data.message : error };
     }
 };
 
@@ -176,7 +190,7 @@ const deleteWishList = async (product_id) => {
             });
         return response.data;
     } catch (error) {
-        return { message: error.response? error.response.data.message : error };
+        return { message: error.response ? error.response.data.message : error };
     }
 };
 
@@ -187,6 +201,7 @@ export default UserService = {
     getOrderByCode,
     checkOut,
     getAllProducts,
+    getProductById,
     getProductDetail,
     getProductReview,
     addProductReview,

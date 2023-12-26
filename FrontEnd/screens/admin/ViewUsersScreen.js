@@ -18,7 +18,7 @@ import { Icon } from "@rneui/themed";
 
 const ViewUsersScreen = ({ navigation, route }) => {
   const [isloading, setIsloading] = useState(false);
-  const [refeshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [users, setUsers] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [filterItem, setFilterItem] = useState("");

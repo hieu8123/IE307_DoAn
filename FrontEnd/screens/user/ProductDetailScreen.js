@@ -317,7 +317,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
       {tabIndex == 2 &&
         <View>
           <View style={styles.reviewInfoContainer}>
-            {reviews.length == 1 ? (
+            {reviews.length == 0 ? (
               <Text style={styles.reviewInfoText}>No Reviews</Text>
             ) : (
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -349,6 +349,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
                   startingValue={item.rating}
                   tintColor={colors.light}
                   imageSize={20}
+                  style={{ alignSelf: 'flex-start' }}
                 />
                 <Text style={styles.reviewComment}>{item.comment}</Text>
               </View>

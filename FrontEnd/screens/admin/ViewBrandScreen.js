@@ -20,7 +20,7 @@ import { Icon } from "@rneui/themed";
 const ViewBrandScreen = ({ navigation, route }) => {
 
   const [isloading, setIsloading] = useState(false);
-  const [refeshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [brands, setBrands] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [filterItem, setFilterItem] = useState("");

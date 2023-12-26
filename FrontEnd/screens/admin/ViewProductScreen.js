@@ -19,7 +19,7 @@ import { Icon } from "@rneui/themed";
 
 const ViewProductScreen = ({ navigation, route }) => {
   const [isloading, setIsloading] = useState(false);
-  const [refeshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [products, setProducts] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [filterItem, setFilterItem] = useState("");
@@ -139,36 +139,36 @@ const ViewProductScreen = ({ navigation, route }) => {
         setValue={setFilterItem}
       />
 
-        <FlatList
-          data={foundItems}
-          style={{ flex: 1, width: "100%" }}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => (
-            <ProductList
-              key={index}
-              image={`${network.serverip}${item.image}`}
-              title={item.title}
-              brand={item.brand}
-              price={item.price}
-              quantity={item.quantity}
-              onPressView={() => {
-                // Do something when pressed
-              }}
-              onPressEdit={() => {
-                navigation.navigate("editproduct", {
-                  product: item,
-                });
-              }}
-              onPressDelete={() => {
-                showConfirmDialog(item.id);
-              }}
-            />
-          )}
-          ListEmptyComponent={
-            <Text>{`No product found with the name of ${filterItem}!`}</Text>
-          }
-        />
+      <FlatList
+        data={foundItems}
+        style={{ flex: 1, width: "100%" }}
+        showsVerticalScrollIndicator={false}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item, index }) => (
+          <ProductList
+            key={index}
+            image={`${network.serverip}${item.image}`}
+            title={item.title}
+            brand={item.brand}
+            price={item.price}
+            quantity={item.quantity}
+            onPressView={() => {
+              // Do something when pressed
+            }}
+            onPressEdit={() => {
+              navigation.navigate("editproduct", {
+                product: item,
+              });
+            }}
+            onPressDelete={() => {
+              showConfirmDialog(item.id);
+            }}
+          />
+        )}
+        ListEmptyComponent={
+          <Text>{`No product found with the name of ${filterItem}!`}</Text>
+        }
+      />
     </View>
   );
 };

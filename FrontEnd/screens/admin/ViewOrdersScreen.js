@@ -17,7 +17,7 @@ import { Icon } from "@rneui/themed";
 
 const ViewOrdersScreen = ({ navigation, route }) => {
   const [isloading, setIsloading] = useState(false);
-  const [refeshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [orders, setOrders] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [filterItem, setFilterItem] = useState("");

@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  SectionList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors, dateFormat } from "../../until";
@@ -72,84 +73,77 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
           </Text>
         </View>
       </View>
-      <ScrollView
+      <FlatList
         style={styles.bodyContainer}
         showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.containerNameContainer}>
+        data={[
+          { key: 'shipAndBillTo', title: 'Ship & Bill to', content: orderDetail?.user },
+          { key: 'orderInfo', title: 'Order Info', content: orderDetail },
+          { key: 'packageDetails', title: 'Package Details', content: { value, orderDetail } },
+        ]}
+        keyExtractor={(item) => item.key}
+        renderItem={({ item }) => (
           <View>
-            <Text style={styles.containerNameText}>Ship & Bill to</Text>
-          </View>
-        </View>
-        <View style={styles.ShipingInfoContainer}>
-          <Text style={styles.secondarytextMedian}>
-            {orderDetail?.user?.name}
-          </Text>
-          <Text style={styles.secondarytextMedian}>
-            {orderDetail?.user?.email}
-          </Text>
-          <Text style={styles.secondarytextSm}>{orderDetail.country + ", " + orderDetail.city + ", " + orderDetail.shippingAddress}</Text>
-          <Text style={styles.secondarytextSm}>{orderDetail?.zipcode}</Text>
-        </View>
-        <View>
-          <Text style={styles.containerNameText}>Order Info</Text>
-        </View>
-        <View style={styles.orderInfoContainer}>
-          <Text style={styles.secondarytextMedian}>
-            Order # {orderDetail?.orderId}
-          </Text>
-          <Text style={styles.secondarytextSm}>
-            Ordered on {dateFormat(orderDetail.updatedAt)}
-          </Text>
-          {orderDetail?.shippedOn && (
-            <Text style={styles.secondarytextSm}>
-              Shipped on {orderDetail.delivery_date}
-            </Text>
-          )}
-          {orderDetail?.deliveredOn && (
-            <Text style={styles.secondarytextSm}>
-              Delivered on {orderDetail.received_date}
-            </Text>
-          )}
-        </View>
-        <View style={styles.containerNameContainer}>
-          <View>
-            <Text style={styles.containerNameText}>Package Details</Text>
-          </View>
-        </View>
-        <View style={styles.orderItemsContainer}>
-          <View style={styles.orderItemContainer}>
-            <Text style={styles.orderItemText}>Package</Text>
-            <Text>{value}</Text>
-          </View>
-          <View style={styles.orderItemContainer}>
-            <Text style={styles.orderItemText}>
-              Order on : {dateFormat(orderDetail?.updatedAt)}
-            </Text>
-          </View>
-          <FlatList
-            style={styles.orderSummaryContainer}
-            nestedScrollEnabled={true}
-            data={orderDetail.details}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => (
-              <View key={index}>
-                <BasicProductList
-                  title={item?.productId?.title}
-                  price={item?.price}
-                  quantity={item?.quantity}
-                />
+            <View style={styles.containerNameContainer}>
+              <Text style={styles.containerNameText}>{item.title}</Text>
+            </View>
+            {item.key === 'shipAndBillTo' && (
+              <View style={styles.ShipingInfoContainer}>
+                <Text style={styles.secondarytextMedian}>{item.content?.name}</Text>
+                <Text style={styles.secondarytextMedian}>{item.content?.email}</Text>
+                <Text style={styles.secondarytextSm}>
+                  {item.content?.country + ', ' + item.content?.city + ', ' + item.content?.shippingAddress}
+                </Text>
+                <Text style={styles.secondarytextSm}>{item.content?.zipcode}</Text>
               </View>
             )}
-          />
-
-          <View style={styles.orderItemContainer}>
-            <Text style={styles.orderItemText}>Total</Text>
-            <Text>{items.amount}$</Text>
+            {item.key === 'orderInfo' && (
+              <View style={styles.orderInfoContainer}>
+                <Text style={styles.secondarytextMedian}>Order # {item.content?.orderId}</Text>
+                <Text style={styles.secondarytextSm}>Ordered on {dateFormat(item.content?.updatedAt)}</Text>
+                {item.content?.shippedOn && (
+                  <Text style={styles.secondarytextSm}>Shipped on {item.content?.delivery_date}</Text>
+                )}
+                {item.content?.deliveredOn && (
+                  <Text style={styles.secondarytextSm}>Delivered on {item.content?.received_date}</Text>
+                )}
+              </View>
+            )}
+            {item.key === 'packageDetails' && (
+              <View style={styles.orderItemsContainer}>
+                <View style={styles.orderItemContainer}>
+                  <Text style={styles.orderItemText}>Package</Text>
+                  <Text>{item.content.value}</Text>
+                </View>
+                <View style={styles.orderItemContainer}>
+                  <Text style={styles.orderItemText}>
+                    Order on : {dateFormat(item.content.orderDetail?.updatedAt)}
+                  </Text>
+                </View>
+                <FlatList
+                  style={styles.orderSummaryContainer}
+                  nestedScrollEnabled={true}
+                  data={orderDetail.details}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => (
+                    <View key={index}>
+                      <BasicProductList
+                        productId={item?.product_id}
+                        price={item?.price}
+                        quantity={item?.quantity}
+                      />
+                    </View>
+                  )}
+                />
+                <View style={styles.orderItemContainer}>
+                  <Text style={styles.orderItemText}>Total</Text>
+                  <Text>{orderDetail.amount}$</Text>
+                </View>
+              </View>
+            )}
           </View>
-        </View>
-        <View style={styles.emptyView}></View>
-      </ScrollView>
+        )}
+      />
       <View style={styles.bottomContainer}>
         <View>
           <DropDownPicker
