@@ -148,7 +148,6 @@ const updateProduct = async (req, res) => {
 
         const productData = { ...data, detail: undefined };
         const productDetail = data.detail;
-        console.log(productDetail);
         const existingProduct = await ProductService.getProduct(productID);
 
         if (existingProduct.image !== productData.image) {
