@@ -87,40 +87,32 @@ const MyWishlistScreen = ({ navigation, route }) => {
           </Text>
         </View>
       </View>
-      {wishlist.length == 0 ? (
-        <View style={styles.ListContiainerEmpty}>
-          <Text style={styles.secondaryTextSmItalic}>
-            "There are no product in wishlist yet."
-          </Text>
-        </View>
-      ) : (
-        <ScrollView
-          style={{ flex: 1, width: "100%", padding: 20 }}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refeshing}
-              onRefresh={handleOnRefresh}
-            />
-          }
-        >
-          {wishlist.map((list, index) => {
-            return (
-              <WishList
-                image={`${network.serverip}${list.product.image}`}
-                title={list.product.title}
-                description={list.product.description}
-                key={index}
-                onPressView={() => handleView(list.product)}
-                onPressRemove={() =>
-                  handleRemoveFromWishlist(list.product.id)
-                }
-              />
-            );
-          })}
-          <View style={styles.emptyView}></View>
-        </ScrollView>
-      )}
+      <FlatList
+        style={{ flex: 1, width: "100%", padding: 20 }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleOnRefresh} />
+        }
+        data={wishlist}
+        keyExtractor={(item) => item.product.id.toString()}
+        renderItem={({ item, index }) => (
+          <WishList
+            image={`${network.serverip}${item.product.image}`}
+            title={item.product.title}
+            description={item.product.description}
+            key={index}
+            onPressView={() => handleView(item.product)}
+            onPressRemove={() => handleRemoveFromWishlist(item.product.id)}
+          />
+        )}
+        ListEmptyComponent={
+          <View style={styles.ListContiainerEmpty}>
+            <Text style={styles.secondaryTextSmItalic}>
+              "There are no product in wishlist yet."
+            </Text>
+          </View>
+        }
+      />
     </View>
   );
 };

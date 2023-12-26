@@ -13,6 +13,7 @@ const CustomInput = ({
   width = "100%",
   keyboardType,
   maxLength,
+  multiline = false
 }) => {
   return (
     <View style={{ width: width }}>
@@ -21,12 +22,13 @@ const CustomInput = ({
         onChangeText={setValue}
         value={value}
         secureTextEntry={secureTextEntry}
-        style={styles.CustomInput}
+        style={{...styles.CustomInput, height: multiline ? 160 : 40}}
         placeholderTextColor={placeholderTextColor}
         onFocus={onFocus}
         borderRadius={radius}
         maxLength={maxLength}
         keyboardType={keyboardType}
+        multiline={multiline}
       />
     </View>
   );
@@ -36,7 +38,6 @@ export default CustomInput;
 
 const styles = StyleSheet.create({
   CustomInput: {
-    height: 40,
     marginVertical: 10,
     width: "100%",
     padding: 5,

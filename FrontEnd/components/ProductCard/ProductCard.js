@@ -7,6 +7,8 @@ const ProductCard = ({
   name,
   price,
   image,
+  productCount,
+  productRate,
   quantity,
   onPress,
   onPressSecondary,
@@ -24,6 +26,13 @@ const ProductCard = ({
         <View style={styles.textContainer}>
           <Text style={styles.secondaryTextSm} numberOfLines={3}>{name}</Text>
           <Text style={styles.primaryTextSm}>{price}$</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.reviewInfoText}>
+                  {productCount ? (productRate / productCount).toFixed(1) : 5}
+                </Text>
+                <Icon name="star" type="font-awesome" size={16} color="#ff8220" />
+                <Text style={styles.reviewInfoText}>({productCount})</Text>
+              </View>
         </View>
         <View>
           {quantity > 0 ? (

@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors } from "../../until";
@@ -95,27 +96,21 @@ const ViewOrdersScreen = ({ navigation, route }) => {
         value={filterItem}
         setValue={setFilterItem}
       />
-      <ScrollView
+      <FlatList
         style={{ flex: 1, width: "100%", padding: 2 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refeshing} onRefresh={handleOnRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={handleOnRefresh} />
         }
-      >
-        {foundItems && foundItems.length == 0 ? (
-          <Text>{`No order found with the order # ${filterItem}!`}</Text>
-        ) : (
-          foundItems.map((order) => {
-            return (
-              <OrderList
-                item={order}
-                key={order.id}
-                onPress={() => handleOrderDetail(order)}
-              />
-            );
-          })
+        data={foundItems}
+        keyExtractor={(order) => order.id.toString()}
+        renderItem={({ item: order }) => (
+          <OrderList item={order} onPress={() => handleOrderDetail(order)} />
         )}
-      </ScrollView>
+        ListEmptyComponent={() => (
+          <Text>{`No order found with the order # ${filterItem}!`}</Text>
+        )}
+      />
     </View>
   );
 };

@@ -19,7 +19,7 @@ import { Icon } from "@rneui/themed";
 const DashboardScreen = ({ navigation, route }) => {
   const [isloading, setIsloading] = useState(false);
   const [data, setData] = useState([]);
-  const [refeshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   const fetchStats = useCallback(async () => {
     const { data: ListDashBoard = null, message = null } = await AdminService.getDashBoard();
@@ -103,30 +103,27 @@ const DashboardScreen = ({ navigation, route }) => {
         <Text style={styles.headingText}>Welcome, Admin</Text>
       </View>
       <View style={{ height: 370 }}>
-        {data && (
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={refeshing}
-                onRefresh={handleOnRefresh}
-              />
-            }
-            contentContainerStyle={styles.cardContainer}
-          >
-            {data.map((data) => (
-              <CustomCard
-                key={data.id}
-                iconName={data.iconName}
-                title={data.title}
-                value={data.value}
-                type={data.type}
-                onPress={() => {
-                  navigation.navigate(data.screenName);
-                }}
-              />
-            ))}
-          </ScrollView>
-        )}
+        <FlatList
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleOnRefresh} />
+          }
+          key={2}
+          numColumns={2}
+          contentContainerStyle={styles.cardContainer}
+          data={data}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <CustomCard
+              iconName={item.iconName}
+              title={item.title}
+              value={item.value}
+              type={item.type}
+              onPress={() => {
+                navigation.navigate(item.screenName);
+              }}
+            />
+          )}
+        />
       </View>
       <View style={styles.headingContainer}>
         <Icon type="material-community" name="menu-right" size={30} color="black" />
@@ -205,8 +202,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   cardContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
     alignContent: "center",
     justifyContent: "center",
   },

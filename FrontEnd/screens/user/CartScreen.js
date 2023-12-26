@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View, StatusBar, Text, ScrollView } from "react-native";
+import { StyleSheet, TouchableOpacity, View, StatusBar, Text, ScrollView, FlatList } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { colors, network } from "../../until";
 import CartProductList from "../../components/CartProductList/CartProductList";
@@ -69,38 +69,37 @@ const CartScreen = ({ navigation }) => {
           <Icon name="cart-remove" type="material-community" size={30} color={colors.muted} />
         </TouchableOpacity>
       </View>
-      {cartproduct.length === 0 ? (
-        <View style={styles.cartProductListContiainerEmpty}>
-          <Icon name="box-open" type="font-awesome-5" size={200} />
-        </View>
-      ) : (
-        <ScrollView style={styles.cartProductListContiainer}>
-          {cartproduct.map((item, index) => (
-            <CartProductList
-              key={index}
-              index={index}
-              image={`${network.serverip}${item.image}`}
-              title={item.title}
-              price={item.price}
-              quantity={item.quantity}
-              onPressIncrement={() => {
-                increaseQuantity(
-                  item.id,
-                  item.quantity,
-                  item.avaiableQuantity
-                );
-              }}
-              onPressDecrement={() => {
-                decreaseQuantity(item.id, item.quantity);
-              }}
-              handleDelete={() => {
-                deleteItem(item.id);
-              }}
-            />
-          ))}
-          <View style={styles.emptyView}></View>
-        </ScrollView>
-      )}
+      <FlatList
+        style={styles.cartProductListContiainer}
+        data={cartproduct}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item, index }) => (
+          <CartProductList
+            key={index}
+            index={index}
+            image={`${network.serverip}${item.image}`}
+            title={item.title}
+            price={item.price}
+            quantity={item.quantity}
+            onPressIncrement={() => {
+              increaseQuantity(item.id, item.quantity, item.avaiableQuantity);
+            }}
+            onPressDecrement={() => {
+              decreaseQuantity(item.id, item.quantity);
+            }}
+            handleDelete={() => {
+              deleteItem(item.id);
+            }}
+          />
+        )}
+        ListEmptyComponent={
+          <View style={styles.cartProductListContiainerEmpty}>
+            <Icon name="box-open" type="font-awesome-5" size={200} />
+            <Text>Your cart is empty</Text>
+          </View>
+        }
+      />
+
       <View style={styles.cartBottomContainer}>
         <View style={styles.cartBottomLeftContainer}>
           <View style={styles.IconContainer}>
@@ -165,6 +164,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 120,
     flex: 1,
   },
   secondaryTextSmItalic: {

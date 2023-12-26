@@ -105,7 +105,99 @@ const CheckoutScreen = ({ navigation, route }) => {
       setZipcode(addressData.zipcode);
     })();
   }, []);
-
+  const data = [
+    { type: 'summary' },
+    { type: 'total' },
+    { type: 'contact' },
+    { type: 'address' },
+    { type: 'payment' },
+  ];
+  const renderItem = ({ item }) => {
+    switch (item.type) {
+      case 'summary':
+        return <Text style={styles.primaryText}>Order Summary</Text>;
+      case 'total':
+        return (
+          <View style={styles.totalOrderInfoContainer}>
+            <View style={styles.list}>
+              <Text>Order</Text>
+              <Text>{totalCost}$</Text>
+            </View>
+            <View style={styles.list}>
+              <Text>Delivery</Text>
+              <Text>{deliveryCost}$</Text>
+            </View>
+            <View style={styles.list}>
+              <Text style={styles.primaryTextSm}>Total</Text>
+              <Text style={styles.secondaryTextSm}>
+                {totalCost + deliveryCost}$
+              </Text>
+            </View>
+          </View>
+        );
+      case 'contact':
+        return (
+          <>
+            <Text style={styles.primaryText}>Contact</Text>
+            <View style={styles.listContainer}>
+              <View style={styles.list}>
+                <Text style={styles.secondaryTextSm}>Email</Text>
+                <Text style={styles.secondaryTextSm}>
+                  bukhtyar.haider1@gmail.com
+                </Text>
+              </View>
+              <View style={styles.list}>
+                <Text style={styles.secondaryTextSm}>Phone</Text>
+                <Text style={styles.secondaryTextSm}>+92 3410988683</Text>
+              </View>
+            </View>
+          </>
+        );
+      case 'address':
+        return (
+          <>
+            <Text style={styles.primaryText}>Address</Text>
+            <View style={styles.listContainer}>
+              <TouchableOpacity
+                style={styles.list}
+                onPress={() => setModalVisible(true)}
+              >
+                <Text style={styles.secondaryTextSm}>Address</Text>
+                <View>
+                  {country || city || streetAddress != '' ? (
+                    <Text
+                      style={styles.secondaryTextSm}
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                    >
+                      {address.length < 25
+                        ? `${address}`
+                        : `${address.substring(0, 25)}...`}
+                    </Text>
+                  ) : (
+                    <Text style={styles.primaryTextSm}>Add</Text>
+                  )}
+                </View>
+              </TouchableOpacity>
+            </View>
+          </>
+        );
+      case 'payment':
+        return (
+          <>
+            <Text style={styles.primaryText}>Payment</Text>
+            <View style={styles.listContainer}>
+              <View style={styles.list}>
+                <Text style={styles.secondaryTextSm}>Method</Text>
+                <Text style={styles.primaryTextSm}>Cash On Delivery</Text>
+              </View>
+            </View>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
   return (
     <View style={styles.container}>
       <StatusBar></StatusBar>

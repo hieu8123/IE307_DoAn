@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import UserService from '../services/UserService';
 import OrderService from '../services/OrderService';
 import OrderDetailService from '../services/OrderDetailService';
+import ReviewService from '../services/ReviewService';
 import jwt from '../config/Token';
 import sendMail from '../config/SendMail';
 import generatePassword from '../config/GeneratePassword';
@@ -172,6 +173,7 @@ const deleteUser = async (req, res) => {
         );
 
         await OrderService.deleteAllOrdersByUser(user.id);
+        await ReviewService.deleteReviewByUser(user.id);
         await UserService.deleteUser(user.id);
 
         res.status(200).json({ data: 'Delete successfully' });

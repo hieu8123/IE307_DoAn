@@ -127,3 +127,29 @@ export const getAddressFromLocation = (location) => {
     };
 };
 
+export const validateField = (value, message) => {
+    if (!value || value.trim() === "") {
+        setError(message);
+        setIsLoading(false);
+        return false;
+    }
+    return true;
+};
+
+export const validatePositiveNumber = (value, message) => {
+    if (!value || isNaN(value) || value <= 0) {
+        setError(message);
+        setIsLoading(false);
+        return false;
+    }
+    return true;
+};
+
+export const validateImage = (value, message) => {
+    if (!value) {
+        setError(message);
+        setIsLoading(false);
+        return false;
+    }
+    return true;
+};

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Alert,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors, network } from "../../until";
@@ -133,32 +134,31 @@ const ViewBrandScreen = ({ navigation, route }) => {
         value={filterItem}
         setValue={setFilterItem}
       />
-      <ScrollView
+      <FlatList
         style={{ flex: 1, width: "100%" }}
+        data={foundItems}
+        keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refeshing} onRefresh={handleOnRefresh} />
+          <RefreshControl refreshing={refreshing} onRefresh={handleOnRefresh} />
         }
-      >
-        {foundItems && foundItems.length == 0 ? (
+        ListEmptyComponent={() => (
           <Text>{`No brand found with the title of ${filterItem}!`}</Text>
-        ) : (
-          foundItems.map((item, index) => (
-            <BrandList
-              icon={`${network.serverip}${item.image}`}
-              key={index}
-              title={item.name}
-              description={item.description}
-              onPressEdit={() => {
-                handleEdit(item);
-              }}
-              onPressDelete={() => {
-                showConfirmDialog(item?.id);
-              }}
-            />
-          ))
         )}
-      </ScrollView>
+        renderItem={({ item, index }) => (
+          <BrandList
+            icon={`${network.serverip}${item.image}`}
+            title={item.name}
+            description={item.description}
+            onPressEdit={() => {
+              handleEdit(item);
+            }}
+            onPressDelete={() => {
+              showConfirmDialog(item?.id);
+            }}
+          />
+        )}
+      />
     </View>
   );
 };

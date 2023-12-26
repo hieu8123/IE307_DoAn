@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
-import { colors, network } from "../../until";
+import { colors, network, validateField, validateImage, validatePositiveNumber } from "../../until";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomAlert from "../../components/CustomAlert";
@@ -27,6 +27,15 @@ const EditProductScreen = ({ navigation, route }) => {
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState("");
   const [description, setDescription] = useState("");
+  const [display, setDisplay] = useState("");
+  const [os, setOS] = useState("");
+  const [sim, setSim] = useState("");
+  const [frontCamera, setFrontCamera] = useState("");
+  const [camera, setCamera] = useState("");
+  const [cpu, setCPU] = useState("");
+  const [ram, setRam] = useState("");
+  const [storage, setStorage] = useState("");
+  const [battery, setBattery] = useState("");
 
   const pickImage = useCallback(async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -42,19 +51,20 @@ const EditProductScreen = ({ navigation, route }) => {
 
   const editProductHandle = useCallback(async () => {
     setIsloading(true);
-    if (title == "") {
-      setError("Please enter the product title");
-      setIsloading(false);
-    } else if (price == 0) {
-      setError("Please enter the product price");
-      setIsloading(false);
-    } else if (quantity <= 0) {
-      setError("Quantity must be greater then 1");
-      setIsloading(false);
-    } else if (image == null) {
-      setError("Please upload the product image");
-      setIsloading(false);
-    } else {
+    if (
+      validateField(title, "Please enter the product title") &&
+      validateImage(price, "Please enter a valid product price") &&
+      validatePositiveNumber(quantity, "Quantity must be greater than 0") &&
+      validateField(display, "Please enter the product display") &&
+      validateField(os, "Please enter the product operating system") &&
+      validateField(sim, "Please enter the product SIM type") &&
+      validateField(frontCamera, "Please enter the product front camera") &&
+      validateField(camera, "Please enter the product rear camera") &&
+      validateField(cpu, "Please enter the product CPU") &&
+      validateField(ram, "Please enter the product RAM") &&
+      validateField(storage, "Please enter the product storage") &&
+      validateField(battery, "Please enter the product battery") &&
+      validateImage(image, "Please upload the product image")) {
       const { data: filename = null, message: messageImage = null } = await UploadService.uploadImageProduct(image);
       if (filename) {
         const { data = null, message = null } = await AdminService.updateProduct(product.id, {
@@ -63,6 +73,17 @@ const EditProductScreen = ({ navigation, route }) => {
           image: filename,
           description: description,
           quantity: quantity,
+          detail: {
+            display: display,
+            os: os,
+            sim: sim,
+            front_camera: frontCamera,
+            camera: camera,
+            cpu: cpu,
+            ram: ram,
+            storage: storage,
+            battery: battery
+          }
         });
         if (data) {
           setIsloading(false);
@@ -87,6 +108,15 @@ const EditProductScreen = ({ navigation, route }) => {
     setQuantity(product.quantity.toString());
     setPrice(product.price.toString());
     setDescription(product.description);
+    setDisplay(product.detail.display);
+    setOS(product.detail.os);
+    setSim(product.detail.sim);
+    setFrontCamera(product.detail.front_camera);
+    setCamera(product.detail.camera);
+    setCPU(product.detail.cpu);
+    setRam(product.detail.ram);
+    setStorage(product.detail.storage);
+    setBattery(product.detail.battery);
   }, []);
 
   return (
@@ -107,7 +137,7 @@ const EditProductScreen = ({ navigation, route }) => {
           <Text style={styles.screenNameText}>Edit Product</Text>
         </View>
         <View>
-          <Text style={styles.screenNameParagraph}>Edit product details</Text>
+          <Text style={styles.screenNameParagraph}>Edit product</Text>
         </View>
       </View>
       <CustomAlert message={error} type={"error"} />
@@ -130,7 +160,7 @@ const EditProductScreen = ({ navigation, route }) => {
           <CustomInput
             value={title}
             setValue={setTitle}
-            placeholder={"Name"}
+            placeholder={"Title"}
             placeholderTextColor={colors.muted}
             radius={5}
           />
@@ -154,6 +184,73 @@ const EditProductScreen = ({ navigation, route }) => {
             value={description}
             setValue={setDescription}
             placeholder={"Description"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <View>
+            <Text style={styles.screenNameParagraph}>Edit product details</Text>
+          </View>
+          <CustomInput
+            value={display}
+            setValue={setDisplay}
+            placeholder={"Display"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <CustomInput
+            value={os}
+            setValue={setOS}
+            placeholder={"Operating System"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <CustomInput
+            value={sim}
+            setValue={setSim}
+            placeholder={"Sim"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <CustomInput
+            value={frontCamera}
+            setValue={setFrontCamera}
+            placeholder={"Front Camera"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <CustomInput
+            value={camera}
+            setValue={setCamera}
+            placeholder={"Camera"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+
+          <CustomInput
+            value={cpu}
+            setValue={setCPU}
+            placeholder={"CPU"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <CustomInput
+            value={ram}
+            setValue={setRam}
+            placeholder={"RAM"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <CustomInput
+            value={storage}
+            setValue={setStorage}
+            placeholder={"Storage"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <CustomInput
+            value={battery}
+            setValue={setBattery}
+            placeholder={"Battery"}
             placeholderTextColor={colors.muted}
             radius={5}
           />

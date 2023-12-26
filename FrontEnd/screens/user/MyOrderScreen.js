@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors, getAuthUser } from "../../until";
@@ -17,7 +18,7 @@ import { Icon } from "@rneui/themed";
 
 const MyOrderScreen = ({ navigation, route }) => {
   const [isloading, setIsloading] = useState(false);
-  const [refeshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
   const [orders, setOrders] = useState([]);
   const [UserInfo, setUserInfo] = useState({});
@@ -71,7 +72,7 @@ const MyOrderScreen = ({ navigation, route }) => {
         </TouchableOpacity>
         <View></View>
         <TouchableOpacity onPress={() => handleOnRefresh()}>
-        <Icon name="shopping-cart" type="font-awesome-5" size={30} color={colors.secondary}/>
+          <Icon name="shopping-cart" type="font-awesome-5" size={30} color={colors.secondary} />
         </TouchableOpacity>
       </View>
       <View style={styles.screenNameContainer}>
@@ -85,35 +86,26 @@ const MyOrderScreen = ({ navigation, route }) => {
         </View>
       </View>
       <CustomAlert message={error} type={'error'} />
-      {orders.length == 0 ? (
-        <View style={styles.ListContiainerEmpty}>
-          <Text style={styles.secondaryTextSmItalic}>
-            "There are no orders placed yet."
-          </Text>
-        </View>
-      ) : (
-        <ScrollView
-          style={{ flex: 1, width: "100%", padding: 20 }}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={refeshing}
-              onRefresh={handleOnRefresh}
-            />
-          }
-        >
-          {orders.map((order, index) => {
-            return (
-              <OrderList
-                item={order}
-                key={index}
-                onPress={() => handleOrderDetail(order)}
-              />
-            );
-          })}
-          <View style={styles.emptyView}></View>
-        </ScrollView>
-      )}
+      <FlatList
+        data={orders}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <OrderList item={item} onPress={() => handleOrderDetail(item)} />
+        )}
+        style={{ flex: 1, width: "100%", padding: 20 }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleOnRefresh} />
+        }
+        ListEmptyComponent={
+          <View style={styles.ListContiainerEmpty}>
+            <Text style={styles.secondaryTextSmItalic}>
+              "There are no orders placed yet."
+            </Text>
+          </View>
+        }
+        ListFooterComponent={<View style={styles.emptyView} />} />
+
     </View>
   );
 };

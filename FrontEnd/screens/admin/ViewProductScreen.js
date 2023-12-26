@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Alert,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors, network } from "../../until";
@@ -22,7 +23,6 @@ const ViewProductScreen = ({ navigation, route }) => {
   const [products, setProducts] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [filterItem, setFilterItem] = useState("");
-
   const handleOnRefresh = useCallback(() => {
     setRefreshing(true);
     fetchProduct();
@@ -138,40 +138,37 @@ const ViewProductScreen = ({ navigation, route }) => {
         value={filterItem}
         setValue={setFilterItem}
       />
-      <ScrollView
-        style={{ flex: 1, width: "100%" }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refeshing} onRefresh={handleOnRefresh} />
-        }
-      >
-        {foundItems && foundItems.length == 0 ? (
-          <Text>{`No product found with the name of ${filterItem}!`}</Text>
-        ) : (
-          foundItems.map((product, index) => {
-            return (
-              <ProductList
-                key={index}
-                image={`${network.serverip}${product.image}`}
-                title={product.title}
-                brand={product.brand}
-                price={product.price}
-                quantity={product.quantity}
-                onPressView={() => {
-                }}
-                onPressEdit={() => {
-                  navigation.navigate("editproduct", {
-                    product: product,
-                  });
-                }}
-                onPressDelete={() => {
-                  showConfirmDialog(product.id);
-                }}
-              />
-            );
-          })
-        )}
-      </ScrollView>
+
+        <FlatList
+          data={foundItems}
+          style={{ flex: 1, width: "100%" }}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <ProductList
+              key={index}
+              image={`${network.serverip}${item.image}`}
+              title={item.title}
+              brand={item.brand}
+              price={item.price}
+              quantity={item.quantity}
+              onPressView={() => {
+                // Do something when pressed
+              }}
+              onPressEdit={() => {
+                navigation.navigate("editproduct", {
+                  product: item,
+                });
+              }}
+              onPressDelete={() => {
+                showConfirmDialog(item.id);
+              }}
+            />
+          )}
+          ListEmptyComponent={
+            <Text>{`No product found with the name of ${filterItem}!`}</Text>
+          }
+        />
     </View>
   );
 };

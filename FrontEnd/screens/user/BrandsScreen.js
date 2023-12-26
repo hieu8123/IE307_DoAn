@@ -199,6 +199,8 @@ const BrandsScreen = ({ navigation, route }) => {
                   name={product.title}
                   image={`${network.serverip}${product.image}`}
                   price={product.price}
+                  productCount={product.total_count}
+                  productRate={product.total_rating}
                   quantity={product.quantity}
                   onPress={() => handleProductPress(product)}
                   onPressSecondary={() => handleAddToCat(product)}
