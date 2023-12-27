@@ -2,17 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { colors } from "../../until";
 import { Icon } from "@rneui/themed";
-import { UserService } from "../../services"
 
-const BasicProductList = ({ productId, price, quantity }) => {
-  const [title, setTitle] = useState('');
-  useEffect(() => {
-    const loadProduct = async () => {
-      const product = await UserService.getProductById(productId);
-      setTitle(product.product.title)
-    }
-    loadProduct();
-  }, [])
+
+const BasicProductList = ({ title, price, quantity }) => {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>

@@ -128,7 +128,7 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
                   renderItem={({ item, index }) => (
                     <View key={index}>
                       <BasicProductList
-                        productId={item?.product_id}
+                        title={item?.title}
                         price={item?.price}
                         quantity={item?.quantity}
                       />

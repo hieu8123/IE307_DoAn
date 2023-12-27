@@ -138,16 +138,16 @@ const updateProductRating = async (productId) => {
     WHERE id = ?
   `;
 
-  const values = [productId, productId, productId];
+    const values = [productId, productId, productId];
 
-  const connection = createConnection();
+    const connection = createConnection();
 
-  try {
-      const [result] = await connection.promise().query(query, values);
-      return result;
-  } finally {
-      connection.end();
-  }
+    try {
+        const [result] = await connection.promise().query(query, values);
+        return result;
+    } finally {
+        connection.end();
+    }
 };
 
 

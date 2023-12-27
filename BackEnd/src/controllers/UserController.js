@@ -181,6 +181,22 @@ const getProductDetail = async (req, res) => {
     }
 };
 
+const getProductById = async (req, res) => {
+    try {
+        const user = req.user;
+        const { productId } = req.params;
+        const product = await ProductService.getProduct(productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.status(200).json({ product: product });
+    } catch (error) {
+        console.error('Error in getProductDetail:', error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+
 const getProductReview = async (req, res) => {
     try {
         const user = req.user;
@@ -260,5 +276,6 @@ module.exports = {
     getProductDetail,
     getOrderByCode,
     getProductReview,
-    addProductReview
+    addProductReview,
+    getProductById
 };
