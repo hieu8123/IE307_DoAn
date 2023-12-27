@@ -3,10 +3,8 @@ import {
   Text,
   StatusBar,
   View,
-  ScrollView,
   TouchableOpacity,
   FlatList,
-  SectionList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors, dateFormat } from "../../until";
@@ -48,7 +46,6 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
     }
     setValue(orderDetail.status);
   }, []);
-
   return (
     <View style={styles.container}>
       <CustomProgressBar visible={isloading} label={'Loading...'} />
@@ -77,7 +74,7 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
         style={styles.bodyContainer}
         showsVerticalScrollIndicator={false}
         data={[
-          { key: 'shipAndBillTo', title: 'Ship & Bill to', content: orderDetail?.user },
+          { key: 'shipAndBillTo', title: 'Ship & Bill to', content: orderDetail },
           { key: 'orderInfo', title: 'Order Info', content: orderDetail },
           { key: 'packageDetails', title: 'Package Details', content: { value, orderDetail } },
         ]}
@@ -89,12 +86,12 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
             </View>
             {item.key === 'shipAndBillTo' && (
               <View style={styles.ShipingInfoContainer}>
-                <Text style={styles.secondarytextMedian}>{item.content?.name}</Text>
-                <Text style={styles.secondarytextMedian}>{item.content?.email}</Text>
+                <Text style={styles.secondarytextMedian}>{item.content.user.name}</Text>
+                <Text style={styles.secondarytextMedian}>{item.content.user.email}</Text>
                 <Text style={styles.secondarytextSm}>
-                  {item.content?.country + ', ' + item.content?.city + ', ' + item.content?.shippingAddress}
+                  {item.content.country + ', ' + item.content.city + ', ' + item.content.delivery_address}
                 </Text>
-                <Text style={styles.secondarytextSm}>{item.content?.zipcode}</Text>
+                <Text style={styles.secondarytextSm}>{item.content.zipcode}</Text>
               </View>
             )}
             {item.key === 'orderInfo' && (
@@ -128,8 +125,8 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
                   renderItem={({ item, index }) => (
                     <View key={index}>
                       <BasicProductList
-                        productId={item?.product_id}
-                        price={item?.price}
+                        title={item.title}
+                        price={item.price}
                         quantity={item?.quantity}
                       />
                     </View>

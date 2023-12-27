@@ -134,12 +134,14 @@ const MyOrderDetailScreen = ({ navigation, route }) => {
             style={styles.orderSummaryContainer}
             nestedScrollEnabled={true}
           >
-            {orderDetail.details.map((product, index) => (
+            {orderDetail.details.map((item, index) => (
               <View key={index}>
+                {console.log(item.product)}
                 <BasicProductList
-                  title={product.name}
-                  price={product.price}
-                  quantity={product.quantity}
+                  title={item.product.title}
+                  price={item.price}
+                  quantity={item.quantity}
+                  handleCallback={() => navigation.navigate('productdetail', { product: item.product })}
                 />
               </View>
             ))}

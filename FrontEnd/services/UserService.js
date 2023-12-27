@@ -93,20 +93,6 @@ const getProductByCode = async (code) => {
     }
 };
 
-const getProductById = async (productId) => {
-    try {
-        const user = await getAuthUser();
-        const response = await axios.get(`${network.serverip}/product/${productId}`, {
-            headers: {
-                Authorization: `Bearer ${user.token}`,
-            },
-        });
-        return response.data;
-    } catch (error) {
-        return { message: error.response ? error.response.data.message : error };
-    }
-};
-
 const getProductDetail = async (productId) => {
     try {
         const user = await getAuthUser();
@@ -201,7 +187,6 @@ export default UserService = {
     getOrderByCode,
     checkOut,
     getAllProducts,
-    getProductById,
     getProductDetail,
     getProductReview,
     addProductReview,

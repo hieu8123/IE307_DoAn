@@ -52,7 +52,7 @@ const getAllOrders = async (req, res) => {
                 const detailsWithProduct = await Promise.all(
                     details.map(async (detail) => {
                         const product = await ProductService.getProduct(detail.product_id);
-                        return { ...detail, name: product.name };
+                        return { ...detail, title: product.title };
                     })
                 );
 

@@ -38,7 +38,12 @@ const getAllOrdersByUser = async (req, res) => {
                 const detailsWithProduct = await Promise.all(
                     details.map(async (detail) => {
                         const product = await ProductService.getProduct(detail.product_id);
-                        return { ...detail, name: product.title };
+                        return {
+                            ...detail, product: {
+                                ...product,
+                                image: PathImage.Products + product.image,
+                            }
+                        };
                     })
                 );
                 return {
@@ -47,7 +52,6 @@ const getAllOrdersByUser = async (req, res) => {
                 };
             })
         );
-
         res.status(200).json({ orders: ordersWithDetails });
     } catch (error) {
         console.error(error);
