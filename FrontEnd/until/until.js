@@ -5,14 +5,11 @@ export const splashImages = [
         image: require("../assets/logo/logo.png")
     },
     {
-        image: require("../assets/logo/logo_75.png")
+        image: require("../assets/logo/logo_blue.png")
     },
     {
-        image: require("../assets/logo/logo_50.png")
-    },
-    {
-        image: require("../assets/logo/logo_75.png")
-    },
+        image: require("../assets/logo/logo_red.png")
+    }
     {
         image: require("../assets/logo/logo.png")
     },
