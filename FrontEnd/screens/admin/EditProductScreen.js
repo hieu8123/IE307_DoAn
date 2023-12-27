@@ -17,8 +17,11 @@ import * as ImagePicker from "expo-image-picker";
 import CustomProgressBar from "../../components/CustomProgressBar";
 import { AdminService, UploadService } from "../../services";
 import { Icon } from "@rneui/themed";
+import { useNavigation } from '@react-navigation/native';
 
-const EditProductScreen = ({ navigation, route }) => {
+const EditProductScreen = ({ route }) => {
+
+  const navigation = useNavigation();
   const { product } = route.params;
   const [isloading, setIsloading] = useState(false);
   const [title, setTitle] = useState("");
@@ -65,39 +68,65 @@ const EditProductScreen = ({ navigation, route }) => {
       validateField(storage, "Please enter the product storage") &&
       validateField(battery, "Please enter the product battery") &&
       validateImage(image, "Please upload the product image")) {
-      const { data: filename = null, message: messageImage = null } = await UploadService.uploadImageProduct(image);
-      if (filename) {
-        const { data = null, message = null } = await AdminService.updateProduct(product.id, {
-          title: title,
-          price: price,
-          image: filename,
-          description: description,
-          quantity: quantity,
-          detail: {
-            display: display,
-            os: os,
-            sim: sim,
-            front_camera: frontCamera,
-            camera: camera,
-            cpu: cpu,
-            ram: ram,
-            storage: storage,
-            battery: battery
+
+      try {
+        let filename = null;
+        let messageImage = null;
+
+        // Check if there is an image to upload
+        if (image) {
+          const uploadResult = await UploadService.uploadImageProduct(image);
+          filename = uploadResult.data || null;
+          messageImage = uploadResult.message || null;
+
+          // Handle the case where the image upload fails
+          if (!filename) {
+            setIsloading(false);
+            setError(String(messageImage) || "Image upload failed");
+            return;
           }
+        }
+
+        // Continue with the product update only if an image was successfully uploaded
+        const { data, message } = await AdminService.updateProduct(product.id, {
+          title,
+          price,
+          image: filename,
+          description,
+          quantity,
+          detail: {
+            display,
+            os,
+            sim,
+            front_camera: frontCamera,
+            camera,
+            cpu,
+            ram,
+            storage,
+            battery,
+          },
         });
+
         if (data) {
           setIsloading(false);
           navigation.navigate('viewproducts');
           setError("");
         } else {
           setIsloading(false);
-          if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
-          setError(message);
+          if (message === 'jwt expired' || message === 'Not authorized. Admin role required.') {
+            logout(navigation);
+          }
+          const errorMessage = message || "Product update failed";
+          setError(String(errorMessage));
         }
-      } else {
+      } catch (error) {
+        // Handle unexpected errors
         setIsloading(false);
-        if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
-        setError(messageImage);
+        console.error("Error during image upload or product update:", error);
+
+        // Extract relevant information from the error
+        const errorMessage = error.message || "An unexpected error occurred";
+        setError(String(errorMessage));
       }
     }
   });
