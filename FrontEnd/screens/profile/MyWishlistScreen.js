@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
 import { colors, network } from "../../until";
@@ -16,7 +17,7 @@ import { Icon } from "@rneui/themed";
 
 const MyWishlistScreen = ({ navigation, route }) => {
   const [isloading, setIsloading] = useState(false);
-  const [refeshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [wishlist, setWishlist] = useState([]);
 
   const handleView = (product) => {
@@ -51,8 +52,7 @@ const MyWishlistScreen = ({ navigation, route }) => {
       setIsloading(false);
       if (message === 'jwt expired') logout(navigation);
     }
-
-    setIsDisbale(false);
+    fetchWishlist();
   });
 
   useEffect(() => {

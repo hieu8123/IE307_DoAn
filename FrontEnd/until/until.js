@@ -37,7 +37,7 @@ export const colors = {
 
 export const network = {
     serverip: "http://10.0.28.24:8080",
-};
+}
 
 export const getAuthUser = async () => {
     try {

@@ -55,7 +55,6 @@ const getAllOrders = async (req, res) => {
                         return { ...detail, title: product.title };
                     })
                 );
-                console.log(detailsWithProduct)
                 return {
                     ...order,
                     details: detailsWithProduct,

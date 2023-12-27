@@ -38,7 +38,12 @@ const getAllOrdersByUser = async (req, res) => {
                 const detailsWithProduct = await Promise.all(
                     details.map(async (detail) => {
                         const product = await ProductService.getProduct(detail.product_id);
-                        return { ...detail, name: product.title };
+                        return {
+                            ...detail, product: {
+                                ...product,
+                                image: PathImage.Products + product.image,
+                            }
+                        };
                     })
                 );
                 return {
@@ -47,7 +52,6 @@ const getAllOrdersByUser = async (req, res) => {
                 };
             })
         );
-
         res.status(200).json({ orders: ordersWithDetails });
     } catch (error) {
         console.error(error);
@@ -222,7 +226,6 @@ const addProductReview = async (req, res) => {
         const user = req.user;
         const { productId } = req.params;
         const { data } = req.body;
-        console.log(req.body);
         const reviewsProduct = await ReviewService.addReview(user.id, productId, data);
         await ProductService.updateProductRating(productId);
         if (!reviewsProduct) {

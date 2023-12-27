@@ -1,25 +1,44 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
 import { colors } from "../../until";
 import { Icon } from "@rneui/themed";
+import { UserService } from "../../services"
 
-
-const BasicProductList = ({ title, price, quantity }) => {
+const BasicProductList = ({ title, price, quantity, handleCallback }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        <View style={styles.IconContainer}>
-          <Icon name="square" type="ionicon" size={30} color={colors.muted} />
+    handleCallback ? (
+      <TouchableOpacity onPress={handleCallback}>
+        <View style={styles.container}>
+          <View style={styles.innerContainer}>
+            <View style={styles.IconContainer}>
+              <Icon name="square" type="ionicon" size={30} color={colors.muted} />
+            </View>
+            <View style={styles.productInfoContainer}>
+              <Text style={styles.secondaryText}>{title}</Text>
+              <Text>x{quantity}</Text>
+            </View>
+          </View>
+          <View>
+            <Text style={styles.primaryText}>{quantity * price}$</Text>
+          </View>
         </View>
-        <View style={styles.productInfoContainer}>
-          <Text style={styles.secondaryText}>{title}</Text>
-          <Text>x{quantity}</Text>
+      </TouchableOpacity>
+    ) : (
+      <View style={styles.container}>
+        <View style={styles.innerContainer}>
+          <View style={styles.IconContainer}>
+            <Icon name="square" type="ionicon" size={30} color={colors.muted} />
+          </View>
+          <View style={styles.productInfoContainer}>
+            <Text style={styles.secondaryText}>{title}</Text>
+            <Text>x{quantity}</Text>
+          </View>
+        </View>
+        <View>
+          <Text style={styles.primaryText}>{quantity * price}$</Text>
         </View>
       </View>
-      <View>
-        <Text style={styles.primaryText}>{quantity * price}$</Text>
-      </View>
-    </View>
+    )
   );
 };
 
