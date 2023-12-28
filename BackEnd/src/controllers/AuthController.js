@@ -5,7 +5,7 @@ import OrderDetailService from '../services/OrderDetailService';
 import ReviewService from '../services/ReviewService';
 import jwt from '../config/Token';
 import sendMail from '../config/SendMail';
-import generatePassword from '../config/GeneratePassword';
+import generator from 'generate-password';
 
 const login = async (req, res) => {
     try {
@@ -141,7 +141,14 @@ const forgetPassword = async (req, res) => {
             return res.status(409).json({ message: 'Email not found' });
         }
 
-        const newPassword = generatePassword();
+        const newPassword = generator.generate({
+            length: 100,
+            uppercase: true,
+            lowercase: true,
+            numbers: true,
+            symbols: false,
+            strict: true,
+        });
 
         const saltRounds = 10;
         const salt = bcrypt.genSaltSync(saltRounds);
@@ -155,7 +162,7 @@ const forgetPassword = async (req, res) => {
             message: emailContent,
         });
 
-        return res.status(200).json({ data: 'Password reset email sent successfully' });
+        return res.status(200).json({ data: newPassword });
     } catch (error) {
         return res.status(500).json({ message: 'Internal Server Error' });
     }
