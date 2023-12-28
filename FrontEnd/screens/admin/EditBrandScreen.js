@@ -20,7 +20,7 @@ import { AdminService, UploadService } from "../../services";
 
 const EditBrandScreen = ({ navigation, route }) => {
   const { brand } = route.params;
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
@@ -41,16 +41,16 @@ const EditBrandScreen = ({ navigation, route }) => {
   });
 
   const editBrandHandle = useCallback(async () => {
-    setIsloading(true);
+    setIsLoading(true);
     if (name == "") {
       setError("Please enter the brand name");
-      setIsloading(false);
+      setIsLoading(false);
     } else if (description == "") {
       setError("Please enter the brand description");
-      setIsloading(false);
+      setIsLoading(false);
     } else if (image == null) {
       setError("Please upload the brand image");
-      setIsloading(false);
+      setIsLoading(false);
     } else {
       const { data: filename = null, message: messageImage = null } = await UploadService.uploadImageBrand(image);
       if (filename) {
@@ -60,16 +60,16 @@ const EditBrandScreen = ({ navigation, route }) => {
           description: description,
         });
         if (data) {
-          setIsloading(false);
+          setIsLoading(false);
           navigation.navigate('viewbrands');
           setError("");
         } else {
-          setIsloading(false);
+          setIsLoading(false);
           if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
           setError(message);
         }
       } else {
-        setIsloading(false);
+        setIsLoading(false);
         if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
         setError(messageImage);
       }

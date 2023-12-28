@@ -16,7 +16,7 @@ import CustomProgressBar from "../../components/CustomProgressBar";
 import { Icon } from "@rneui/themed";
 
 const ViewOrdersScreen = ({ navigation, route }) => {
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [orders, setOrders] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
@@ -35,15 +35,15 @@ const ViewOrdersScreen = ({ navigation, route }) => {
   });
 
   const fetchOrders = useCallback(async () => {
-    setIsloading(true);
+    setIsLoading(true);
     const { orders: data = null, message = null } = await AdminService.getAllOrders();
     if (data) {
       setOrders(data);
       filter(data);
-      setIsloading(false);
+      setIsLoading(false);
     } else {
       if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
-      setIsloading(false);
+      setIsLoading(false);
     }
   });
 
@@ -64,7 +64,7 @@ const ViewOrdersScreen = ({ navigation, route }) => {
   }, [filterItem]);
 
   useEffect(() => {
-    setIsloading()
+    setIsLoading()
     fetchOrders();
   }, []);
 

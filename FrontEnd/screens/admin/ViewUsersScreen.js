@@ -17,22 +17,22 @@ import { AdminService } from "../../services";
 import { Icon } from "@rneui/themed";
 
 const ViewUsersScreen = ({ navigation, route }) => {
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [users, setUsers] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
   const [filterItem, setFilterItem] = useState("");
 
   const fetchUsers = useCallback(async () => {
-    setIsloading(true);
+    setIsLoading(true);
     const { users: data = null, message = null } = await AdminService.getAllUser();
     if (data) {
       setUsers(data);
       filter(data);
-      setIsloading(false);
+      setIsLoading(false);
     } else {
       if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
-      setIsloading(false);
+      setIsLoading(false);
     }
   });
 

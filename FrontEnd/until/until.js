@@ -33,7 +33,7 @@ export const colors = {
 };
 
 export const network = {
-    serverip: "http://10.0.28.24:8080",
+    serverip: "http://192.168.1.102:8080",
 }
 
 export const getAuthUser = async () => {
@@ -124,7 +124,7 @@ export const getAddressFromLocation = (location) => {
     };
 };
 
-export const validateField = (value, message) => {
+export const validateField = (setError, setIsLoading, value, message) => {
     if (!value || value.trim() === "") {
         setError(message);
         setIsLoading(false);
@@ -133,7 +133,7 @@ export const validateField = (value, message) => {
     return true;
 };
 
-export const validatePositiveNumber = (value, message) => {
+export const validatePositiveNumber = (setError, setIsLoading, value, message) => {
     if (!value || isNaN(value) || value <= 0) {
         setError(message);
         setIsLoading(false);
@@ -142,7 +142,7 @@ export const validatePositiveNumber = (value, message) => {
     return true;
 };
 
-export const validateImage = (value, message) => {
+export const validateImage = (setError, setIsLoading, value, message) => {
     if (!value) {
         setError(message);
         setIsLoading(false);

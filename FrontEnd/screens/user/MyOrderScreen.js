@@ -17,7 +17,7 @@ import { UserService } from "../../services";
 import { Icon } from "@rneui/themed";
 
 const MyOrderScreen = ({ navigation, route }) => {
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
   const [orders, setOrders] = useState([]);
@@ -36,13 +36,14 @@ const MyOrderScreen = ({ navigation, route }) => {
   });
 
   const fetchOrders = useCallback(async () => {
-    setIsloading(true);
+    setIsLoading(true);
     const { orders: orderDatas = null, message = null } = await UserService.getAllOrdersByUser();
     if (orderDatas) {
-      setIsloading(false);
+      setIsLoading(false);
       setOrders(orderDatas);
+      setError("");
     } else {
-      setIsloading(false);
+      setIsLoading(false);
       setError(message);
       if (message == 'jwt expired') logout(navigation);
     }

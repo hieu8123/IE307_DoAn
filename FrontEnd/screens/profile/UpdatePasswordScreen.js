@@ -23,7 +23,6 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
       setError("Password not matched");
       return;
     }
-    setError("");
     const { data = null, message = null } = await AuthService.changePassword({ currentPassword, newPassword });
     if (data) {
       setAlertType("success");

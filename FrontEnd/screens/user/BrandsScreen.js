@@ -54,7 +54,6 @@ const BrandsScreen = ({ navigation, route }) => {
       setProducts(productDatas);
       setFoundItems(productDatas);
     } else {
-      setError(message);
       if (message == 'jwt expired') logout(navigation);
     }
   });
@@ -65,7 +64,6 @@ const BrandsScreen = ({ navigation, route }) => {
       setBrands(brandDatas);
       filter(brandDatas);
     } else {
-      setError(message);
       if (message == 'jwt expired') logout(navigation);
     }
   });

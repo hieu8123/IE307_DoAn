@@ -16,7 +16,7 @@ import { UserService } from "../../services";
 import { Icon } from "@rneui/themed";
 
 const MyWishlistScreen = ({ navigation, route }) => {
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [wishlist, setWishlist] = useState([]);
 
@@ -31,25 +31,25 @@ const MyWishlistScreen = ({ navigation, route }) => {
   });
 
   const fetchWishlist = useCallback(async () => {
-    setIsloading(true);
+    setIsLoading(true);
     const { data: wishList = null, message = null } = await UserService.getWishListByUser();
     if (wishList) {
-      setIsloading(false);
+      setIsLoading(false);
       setWishlist(wishList);
     }
     else {
-      setIsloading(false);
+      setIsLoading(false);
       if (message == 'jwt expired') logout(navigation);
     }
   });
 
   const handleRemoveFromWishlist = useCallback(async (id) => {
-    setIsloading(true);
+    setIsLoading(true);
     const { data = null, message = null } = await UserService.deleteWishList(id);
     if (data) {
-      setIsloading(false);
+      setIsLoading(false);
     } else {
-      setIsloading(false);
+      setIsLoading(false);
       if (message === 'jwt expired') logout(navigation);
     }
     fetchWishlist();

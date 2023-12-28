@@ -22,7 +22,7 @@ import * as Location from 'expo-location';
 
 const CheckoutScreen = ({ navigation, route }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const cartproduct = useSelector((state) => state.product);
   const dispatch = useDispatch();
   const { actionEmptyCart } = bindActionCreators(actionCreaters, dispatch);
@@ -36,7 +36,7 @@ const CheckoutScreen = ({ navigation, route }) => {
   const [zipcode, setZipcode] = useState("");
 
   const handleCheckout = async () => {
-    setIsloading(true);
+    setIsLoading(true);
     var payload = [];
     var totalamount = 0;
 
@@ -64,11 +64,11 @@ const CheckoutScreen = ({ navigation, route }) => {
 
     const { data = null, message = null } = await UserService.checkOut(order);
     if (data) {
-      setIsloading(false);
+      setIsLoading(false);
       actionEmptyCart();
       navigation.replace("orderconfirm");
     } else {
-      setIsloading(false);
+      setIsLoading(false);
       if (message == 'jwt expired') logout(navigation);
     }
   };

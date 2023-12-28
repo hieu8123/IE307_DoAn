@@ -17,7 +17,7 @@ import { Icon } from "@rneui/themed";
 
 const ViewOrderDetailScreen = ({ navigation, route }) => {
   const { orderDetail } = route.params;
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [statusDisable, setStatusDisable] = useState(false);
@@ -28,13 +28,13 @@ const ViewOrderDetailScreen = ({ navigation, route }) => {
   ]);
 
   const handleUpdateStatus = useCallback(async (id) => {
-    setIsloading(true);
+    setIsLoading(true);
     const { data = null, message = null } = await AdminService.updateOrderStatus(id, value);
     if (data) {
-      setIsloading(false);
+      setIsLoading(false);
     } else {
       if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
-      setIsloading(false);
+      setIsLoading(false);
     }
   });
 

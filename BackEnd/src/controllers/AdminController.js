@@ -17,7 +17,7 @@ const getDashBoard = async (req, res) => {
         const productCount = await ProductService.getCountProducts(); // Assuming you have a service for products
         const orderCount = await OrderService.getCountOrders(); // Assuming you have a service for orders
 
-        res.status(200).json({
+        return res.status(200).json({
             data: {
                 usersCount: userCount,
                 brandsCount: brandCount,
@@ -27,17 +27,17 @@ const getDashBoard = async (req, res) => {
         });
     } catch (error) {
         console.error('Error getting dashboard data:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
 const getAllUsers = async (req, res) => {
     try {
         const users = await UserService.getAllUsers();
-        res.status(200).json({ users: users });
+        return res.status(200).json({ users: users });
     } catch (error) {
         console.error('Error All Users data:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -63,10 +63,10 @@ const getAllOrders = async (req, res) => {
             })
         );
 
-        res.status(200).json({ orders: ordersWithDetails });
+        return res.status(200).json({ orders: ordersWithDetails });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -79,10 +79,10 @@ const updateOrderStatus = async (req, res) => {
         if (!success) {
             return res.status(404).json({ message: 'Order not found' });
         }
-        res.status(200).json({ data: 'Order status updated successfully' });
+        return res.status(200).json({ data: 'Order status updated successfully' });
     } catch (error) {
         console.error('Error updating order status:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -108,10 +108,10 @@ const getAllProducts = async (req, res) => {
             };
         }));
 
-        res.status(200).json({ products: productsWithDetails });
+        return res.status(200).json({ products: productsWithDetails });
     } catch (error) {
         console.error('Error getting products:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -132,10 +132,10 @@ const addProduct = async (req, res) => {
 
         await ProductService.updateProductCode(product, code);
 
-        res.status(200).json({ data: 'Product added successfully' });
+        return res.status(200).json({ data: 'Product added successfully' });
     } catch (error) {
         console.error('Error adding product:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -151,13 +151,12 @@ const updateProduct = async (req, res) => {
 
         if (existingProduct.image !== productData.image) {
             const imagePath = `${path.join(__dirname, '../../public/products/')}${existingProduct.image}`;
-            fs.unlink(imagePath, (err) => {
+            fs.unlink(imagePath, async (err) => {
                 if (err) {
-                    return res.status(404).json({ message: 'Product not found' });
+                    console.log(err)
                 }
             });
         }
-
         const successProductUpdate = await ProductService.updateProduct(productID, productData);
         const successDetailUpdate = await ProductDetailService.updateProductDetail(productID, productDetail);
 
@@ -165,10 +164,10 @@ const updateProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        res.status(200).json({ data: 'Product updated successfully' });
+        return res.status(200).json({ data: 'Product updated successfully' });
     } catch (error) {
         console.error('Error updating product:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -180,12 +179,11 @@ const deleteProduct = async (req, res) => {
         const product = await ProductService.getProduct(productID);
 
         const imagePath = `${path.join(__dirname, '../../public/products/')}${product.image}`;
-        fs.unlink(imagePath, (err) => {
+        fs.unlink(imagePath, async (err) => {
             if (err) {
-                return res.status(404).json({ message: 'Product not found' });
+                console.log(err)
             }
         });
-
         for (const orderDetail of orderDetails) {
             const order = await OrderService.getOrder(orderDetail.order_id);
             await OrderService.updateOrderAmount(orderDetail.order_id, order.amount - orderDetail.price * orderDetail.quantity);
@@ -200,10 +198,10 @@ const deleteProduct = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        res.status(200).json({ data: 'Product deleted successfully' });
+        return res.status(200).json({ data: 'Product deleted successfully' });
     } catch (error) {
         console.error('Error deleting product:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -219,10 +217,10 @@ const getAllBrands = async (req, res) => {
             icon: PathImage.Brands + brand.icon
         }));
 
-        res.status(200).json({ brands: brandsWithImagePath });
+        return res.status(200).json({ brands: brandsWithImagePath });
     } catch (error) {
         console.error('Error getting all brands:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -230,10 +228,10 @@ const addBrand = async (req, res) => {
     try {
         const { data } = req.body;
         const brand = await BrandService.addBrand(data);
-        res.status(200).json({ data: 'Brand added successfully' });
+        return res.status(200).json({ data: 'Brand added successfully' });
     } catch (error) {
         console.error('Error adding brand:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -244,23 +242,21 @@ const updateBrand = async (req, res) => {
         const brand = await BrandService.getBrand(brandID);
 
         if (brand.image !== data.image) {
-            fs.unlink(`${path.join(__dirname, '../../public/brands/')}${brand.image}`, (err) => {
+            fs.unlink(`${path.join(__dirname, '../../public/brands/')}${brand.image}`, async (err) => {
                 if (err) {
-                    return res.status(404).json({ message: 'Brand not found' });
+                    console.log(err)
                 }
-                console.log(err)
             });
         }
-
         const success = await BrandService.updateBrand(brandID, data);
         if (!success) {
             return res.status(404).json({ message: 'Brand not found' });
         }
 
-        res.status(200).json({ data: 'Brand updated successfully' });
+        return res.status(200).json({ data: 'Brand updated successfully' });
     } catch (error) {
         console.error('Error updating brand:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -269,12 +265,11 @@ const deleteBrand = async (req, res) => {
         const { brandID } = req.params;
         const products = await ProductService.getAllProductsByBrand(brandID);
         const brand = await BrandService.getBrand(brandID);
-        fs.unlink(`${path.join(__dirname, '../../public/brands/')}${brand.image}`, (err) => {
+        fs.unlink(`${path.join(__dirname, '../../public/brands/')}${brand.image}`, async (err) => {
             if (err) {
-                return res.status(404).json({ message: 'Brand not found' });
+                console.log(err)
             }
         });
-
         for (const product of products) {
             const orderDetails = await OrderDetailService.getOrderDetailByProductId(product.id);
 
@@ -296,7 +291,7 @@ const deleteBrand = async (req, res) => {
         res.status(200).json({ data: 'Brand deleted successfully' });
     } catch (error) {
         console.error('Error deleting brand:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 

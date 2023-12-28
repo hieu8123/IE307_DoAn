@@ -17,7 +17,7 @@ import { AdminService } from "../../services";
 import { Icon } from "@rneui/themed";
 
 const DashboardScreen = ({ navigation, route }) => {
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -58,10 +58,10 @@ const DashboardScreen = ({ navigation, route }) => {
           screenName: "viewbrands",
         },
       ]);
-      setIsloading(false);
+      setIsLoading(false);
     } else {
       if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
-      setIsloading(false);
+      setIsLoading(false);
     }
 
   });

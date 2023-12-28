@@ -18,7 +18,7 @@ import { AdminService } from "../../services";
 import { Icon } from "@rneui/themed";
 
 const ViewProductScreen = ({ navigation, route }) => {
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [products, setProducts] = useState([]);
   const [foundItems, setFoundItems] = useState([]);
@@ -30,13 +30,13 @@ const ViewProductScreen = ({ navigation, route }) => {
   });
 
   const handleDelete = useCallback(async (id) => {
-    setIsloading(true);
+    setIsLoading(true);
     const { data = null, message = null } = await AdminService.deleteProduct(id);
     if (data) {
       fetchProduct();
     } else {
       if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
-      setIsloading(false);
+      setIsLoading(false);
     }
   });
 
@@ -59,7 +59,7 @@ const ViewProductScreen = ({ navigation, route }) => {
   });
 
   const fetchProduct = useCallback(async () => {
-    setIsloading(true);
+    setIsLoading(true);
     const { products: data = null, message = null } = await AdminService.getAllProducts();
     if (data) {
       setProducts(data);
@@ -72,10 +72,10 @@ const ViewProductScreen = ({ navigation, route }) => {
       } else {
         setFoundItems(data);
       }
-      setIsloading(false);
+      setIsLoading(false);
     } else {
       if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
-      setIsloading(false);
+      setIsLoading(false);
     }
   });
 

@@ -18,7 +18,7 @@ const login = async (req, res) => {
         }
 
         const token = jwt.generateJwtToken(user.username);
-        res.status(200).json({
+        return res.status(200).json({
             user: {
                 token: token,
                 username: user.username,
@@ -58,7 +58,7 @@ const signup = async (req, res) => {
         });
 
         const token = jwt.generateJwtToken(username);
-        res.status(201).json({
+        return res.status(201).json({
             user: {
                 token: token,
                 username: username,
@@ -68,7 +68,7 @@ const signup = async (req, res) => {
         });
     } catch (error) {
         console.error('Error during registration:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -125,10 +125,10 @@ const changePassword = async (req, res) => {
 
         await UserService.updateUserPassword(user.id, newPassHash);
 
-        res.status(200).json({ data: 'Password changed successfully' });
+        return res.status(200).json({ data: 'Password changed successfully' });
     } catch (error) {
         console.error('Error in changePassword:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
@@ -155,9 +155,9 @@ const forgetPassword = async (req, res) => {
             message: emailContent,
         });
 
-        res.status(200).json({ data: 'Password reset email sent successfully' });
+        return res.status(200).json({ data: 'Password reset email sent successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
@@ -176,10 +176,10 @@ const deleteUser = async (req, res) => {
         await ReviewService.deleteReviewByUser(user.id);
         await UserService.deleteUser(user.id);
 
-        res.status(200).json({ data: 'Delete successfully' });
+        return res.status(200).json({ data: 'Delete successfully' });
     } catch (error) {
         console.error('Error in deleteUser:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 

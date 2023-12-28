@@ -23,7 +23,7 @@ const EditProductScreen = ({ route }) => {
 
   const navigation = useNavigation();
   const { product } = route.params;
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
@@ -53,81 +53,55 @@ const EditProductScreen = ({ route }) => {
   });
 
   const editProductHandle = useCallback(async () => {
-    setIsloading(true);
+    setIsLoading(true);
     if (
-      validateField(title, "Please enter the product title") &&
-      validateImage(price, "Please enter a valid product price") &&
-      validatePositiveNumber(quantity, "Quantity must be greater than 0") &&
-      validateField(display, "Please enter the product display") &&
-      validateField(os, "Please enter the product operating system") &&
-      validateField(sim, "Please enter the product SIM type") &&
-      validateField(frontCamera, "Please enter the product front camera") &&
-      validateField(camera, "Please enter the product rear camera") &&
-      validateField(cpu, "Please enter the product CPU") &&
-      validateField(ram, "Please enter the product RAM") &&
-      validateField(storage, "Please enter the product storage") &&
-      validateField(battery, "Please enter the product battery") &&
-      validateImage(image, "Please upload the product image")) {
-
-      try {
-        let filename = null;
-        let messageImage = null;
-
-        // Check if there is an image to upload
-        if (image) {
-          const uploadResult = await UploadService.uploadImageProduct(image);
-          filename = uploadResult.data || null;
-          messageImage = uploadResult.message || null;
-
-          // Handle the case where the image upload fails
-          if (!filename) {
-            setIsloading(false);
-            setError(String(messageImage) || "Image upload failed");
-            return;
+      validateField(setError, setIsLoading, title, "Please enter the product title") &&
+      validateImage(setError, setIsLoading, price, "Please enter a valid product price") &&
+      validatePositiveNumber(setError, setIsLoading, quantity, "Quantity must be greater than 0") &&
+      validateField(setError, setIsLoading, display, "Please enter the product display") &&
+      validateField(setError, setIsLoading, os, "Please enter the product operating system") &&
+      validateField(setError, setIsLoading, sim, "Please enter the product SIM type") &&
+      validateField(setError, setIsLoading, frontCamera, "Please enter the product front camera") &&
+      validateField(setError, setIsLoading, camera, "Please enter the product rear camera") &&
+      validateField(setError, setIsLoading, cpu, "Please enter the product CPU") &&
+      validateField(setError, setIsLoading, ram, "Please enter the product RAM") &&
+      validateField(setError, setIsLoading, storage, "Please enter the product storage") &&
+      validateField(setError, setIsLoading, battery, "Please enter the product battery") &&
+      validateImage(setError, setIsLoading, image, "Please upload the product image")) {
+        const { data: filename = null, message: messageImage = null } = await UploadService.uploadImageProduct(image);
+        if (filename) {
+          const { data, message } = await AdminService.updateProduct(product.id, {
+            title,
+            price,
+            image: filename,
+            description,
+            quantity,
+            detail: {
+              display,
+              os,
+              sim,
+              front_camera: frontCamera,
+              camera,
+              cpu,
+              ram,
+              storage,
+              battery,
+            },
+          });
+          if (data) {
+            setIsLoading(false);
+            navigation.navigate('viewproducts');
+            setError("");
+          } else {
+            setIsLoading(false);
+            if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
+            setError(message);
           }
-        }
-
-        // Continue with the product update only if an image was successfully uploaded
-        const { data, message } = await AdminService.updateProduct(product.id, {
-          title,
-          price,
-          image: filename,
-          description,
-          quantity,
-          detail: {
-            display,
-            os,
-            sim,
-            front_camera: frontCamera,
-            camera,
-            cpu,
-            ram,
-            storage,
-            battery,
-          },
-        });
-
-        if (data) {
-          setIsloading(false);
-          navigation.navigate('viewproducts');
-          setError("");
         } else {
-          setIsloading(false);
-          if (message === 'jwt expired' || message === 'Not authorized. Admin role required.') {
-            logout(navigation);
-          }
-          const errorMessage = message || "Product update failed";
-          setError(String(errorMessage));
+          setIsLoading(false);
+          if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
+          setError(messageImage);
         }
-      } catch (error) {
-        // Handle unexpected errors
-        setIsloading(false);
-        console.error("Error during image upload or product update:", error);
-
-        // Extract relevant information from the error
-        const errorMessage = error.message || "An unexpected error occurred";
-        setError(String(errorMessage));
-      }
     }
   });
 

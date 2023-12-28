@@ -19,7 +19,7 @@ import { Icon } from "@rneui/themed";
 import { AdminService, UploadService } from "../../services";
 
 const AddBrandScreen = ({ navigation, route }) => {
-  const [isloading, setIsloading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
@@ -39,16 +39,16 @@ const AddBrandScreen = ({ navigation, route }) => {
   });
 
   const addBrandHandle = useCallback(async () => {
-    setIsloading(true);
+    setIsLoading(true);
     if (name == "") {
       setError("Please enter the brand name");
-      setIsloading(false);
+      setIsLoading(false);
     } else if (description == "") {
       setError("Please upload the brand description");
-      setIsloading(false);
+      setIsLoading(false);
     } else if (image == null) {
       setError("Please upload the Catergory image");
-      setIsloading(false);
+      setIsLoading(false);
     } else {
       const { data: filename = null, message: messageImage = null } = await UploadService.uploadImageBrand(image);
       if (filename) {
@@ -58,16 +58,16 @@ const AddBrandScreen = ({ navigation, route }) => {
           description: description,
         });
         if (data) {
-          setIsloading(false);
+          setIsLoading(false);
           navigation.navigate('viewbrands');
           setError("");
         } else {
-          setIsloading(false);
+          setIsLoading(false);
           if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
           setError(message);
         }
       } else {
-        setIsloading(false);
+        setIsLoading(false);
         if (message == 'jwt expired' || message == 'Not authorized. Admin role required.') logout(navigation);
         setError(messageImage);
       }
