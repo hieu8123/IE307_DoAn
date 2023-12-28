@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
-const secretKey = '21520372-21522070';
+const secretKey = process.env.JWT_KEY;
 
 const generateJwtToken = (username) => {
-    return jwt.sign({ username }, secretKey);
+    return jwt.sign({ username }, secretKey, {expiresIn: '24h'});
 };
 
 const decodeJwtToken = (token) => {

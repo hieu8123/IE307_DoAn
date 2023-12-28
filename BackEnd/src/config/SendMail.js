@@ -1,6 +1,8 @@
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer";
+import 'dotenv/config';
 
 const sendMail = async (options) => {
+    console.log(process.env)
     try {
         const transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
