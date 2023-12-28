@@ -9,7 +9,7 @@ export const splashImages = [
     },
     {
         image: require("../assets/logo/logo_red.png")
-    }
+    },
     {
         image: require("../assets/logo/logo.png")
     },
