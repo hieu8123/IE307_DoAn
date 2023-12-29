@@ -298,7 +298,7 @@ const deleteBrand = async (req, res) => {
             return res.status(404).json({ message: 'Brand not found' });
         }
 
-        res.status(200).json({ data: 'Brand deleted successfully' });
+        return res.status(200).json({ data: 'Brand deleted successfully' });
     } catch (error) {
         console.error('Error deleting brand:', error);
         return res.status(500).json({ message: 'Internal server error' });
