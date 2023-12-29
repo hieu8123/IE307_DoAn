@@ -23,6 +23,7 @@ import CustomInput from "../../components/CustomInput";
 
 const ProductDetailScreen = ({ navigation, route }) => {
   const { product } = route.params;
+  console.log(product);
   const [tabIndex, setTabIndex] = useState(0);
   const [onWishlist, setOnWishlist] = useState(false);
   const [avaiableQuantity, setAvaiableQuantity] = useState(0);

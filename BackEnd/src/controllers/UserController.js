@@ -8,6 +8,7 @@ import PathImage from '../config/PathImage';
 import WishListService from '../services/WishListService';
 import UserService from '../services/UserService';
 import bcrypt from 'bcrypt';
+import QRCode from 'qrcode'
 
 const getAllBrands = async (req, res) => {
     try {
@@ -72,15 +73,24 @@ const checkOut = async (req, res) => {
         const code = bcrypt.hashSync(JSON.stringify(order), salt);
         await ProductService.updateProductCode(order_id, code);
 
+        const qrCodeData = JSON.stringify({
+            type: 'order',
+            code: code
+        });
+
+        await QRCode.toFile(`public/qrcode/orders/${order_id}.png`, qrCodeData, {
+            scale: 50,
+        })
+
         for (const detail of details) {
             const details_id = await OrderDetailService.addOrderDetail({ ...detail, order_id });
         }
 
-        res.statusres.status(200).json({ data: 'Checkout successful' });
+        return res.status(200).json({ data: 'Checkout successful' });
     } catch (error) {
         // Handle errors appropriately
         console.error(error);
-        res.statusres.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
@@ -98,10 +108,10 @@ const getAllProducts = async (req, res) => {
             };
         }));
 
-        res.statusres.status(200).json({ products: productsWithImagePath });
+        return res.status(200).json({ products: productsWithImagePath });
     } catch (error) {
         console.error('Error getting products:', error);
-        res.statusres.status(500).json({ message: 'Internal server error' });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 };
 
@@ -121,10 +131,10 @@ const getAllWishListByUser = async (req, res) => {
             })
         );
 
-        res.statusres.status(200).json({ data: wishListWithProducts });
+        return res.status(200).json({ data: wishListWithProducts });
     } catch (error) {
         console.error(error);
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -133,9 +143,9 @@ const addWishList = async (req, res) => {
         const user = req.user;
         const { product_id } = req.body;
         const WistList = await WishListService.addWishlistItem({ user_id: user.id, product_id });
-        res.statusres.status(200).json({ data: "Add WishList Successful" });
+        return res.status(200).json({ data: "Add WishList Successful" });
     } catch (error) {
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -144,9 +154,9 @@ const deleteWishList = async (req, res) => {
         const user = req.user;
         const { productID: product_id } = req.params;
         const WistList = await WishListService.deleteWishlistItemByProductAndUser({ user_id: user.id, product_id });
-        res.statusres.status(200).json({ data: "Delete WishList Successful" });
+        return res.status(200).json({ data: "Delete WishList Successful" });
     } catch (error) {
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -162,10 +172,10 @@ const getProductByCode = async (req, res) => {
 
         product.image = PathImage.Products + product.image;
 
-        res.statusres.status(200).json({ product: product });
+        return res.status(200).json({ product: product });
     } catch (error) {
         console.error('Error in getProductByCode:', error);
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -178,10 +188,10 @@ const getProductDetail = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        res.statusres.status(200).json({ productDetail: productDetail });
+        return res.status(200).json({ productDetail: productDetail });
     } catch (error) {
         console.error('Error in getProductDetail:', error);
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -194,10 +204,10 @@ const getProductById = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        res.statusres.status(200).json({ product: product });
+        return res.status(200).json({ product: product });
     } catch (error) {
         console.error('Error in getProductDetail:', error);
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -213,10 +223,10 @@ const getProductReview = async (req, res) => {
             return { ...review, username: user.username };
         }));
 
-        res.statusres.status(200).json({ reviews: reviewsWithUsername });
+        return res.status(200).json({ reviews: reviewsWithUsername });
     } catch (error) {
         console.error('Error in getProductReview:', error);
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -232,10 +242,10 @@ const addProductReview = async (req, res) => {
             return res.status(404).json({ message: 'Product not found' });
         }
 
-        res.statusres.status(200).json({ data: "Add Reviews For Product Success" });
+        return res.status(200).json({ data: "Add Reviews For Product Success" });
     } catch (error) {
         console.error('Error in addProductReview:', error);
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -255,14 +265,19 @@ const getOrderByCode = async (req, res) => {
         const detailsWithProduct = await Promise.all(
             details.map(async (detail) => {
                 const product = await ProductService.getProduct(detail.product_id);
-                return { ...detail, name: product.title };
+                return {
+                    ...detail, product: {
+                        ...product,
+                        image: PathImage.Products + product.image,
+                    }
+                };
             })
         );
 
-        res.statusres.status(200).json({ order: { ...order, details: detailsWithProduct } });
+        return res.status(200).json({ order: { ...order, details: detailsWithProduct } });
     } catch (error) {
         console.error('Error in getOrderByCode:', error);
-        res.statusres.status(500).json({ message: "Internal Server Error" });
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 };
 

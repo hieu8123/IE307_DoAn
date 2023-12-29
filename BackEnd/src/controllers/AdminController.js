@@ -9,6 +9,7 @@ import PathImage from '../config/PathImage';
 import fs from 'fs';
 import path from 'path';
 import bcrypt from 'bcrypt';
+import QRCode from 'qrcode'
 
 const getDashBoard = async (req, res) => {
     try {
@@ -131,6 +132,15 @@ const addProduct = async (req, res) => {
         const code = bcrypt.hashSync(JSON.stringify(data), salt);
 
         await ProductService.updateProductCode(product, code);
+
+        const qrCodeData = JSON.stringify({
+            type: 'product',
+            code: code
+        });
+
+        await QRCode.toFile(`public/qrcode/products/${product}.png`, qrCodeData, {
+            scale: 50,
+        })
 
         return res.status(200).json({ data: 'Product added successfully' });
     } catch (error) {
