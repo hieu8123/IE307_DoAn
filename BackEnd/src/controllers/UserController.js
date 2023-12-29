@@ -71,7 +71,7 @@ const checkOut = async (req, res) => {
         const saltRounds = 10;
         const salt = bcrypt.genSaltSync(saltRounds);
         const code = bcrypt.hashSync(JSON.stringify(order), salt);
-        await ProductService.updateProductCode(order_id, code);
+        await OrderService.updateOrderCode(order_id, code);
 
         const qrCodeData = JSON.stringify({
             type: 'order',

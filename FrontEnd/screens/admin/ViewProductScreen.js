@@ -144,6 +144,9 @@ const ViewProductScreen = ({ navigation, route }) => {
         style={{ flex: 1, width: "100%" }}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleOnRefresh} />
+        }
         renderItem={({ item, index }) => (
           <ProductList
             key={index}
