@@ -26,7 +26,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
   const [tabIndex, setTabIndex] = useState(0);
   const [onWishlist, setOnWishlist] = useState(false);
   const [avaiableQuantity, setAvaiableQuantity] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [isDisable, setIsDisbale] = useState(false);
   const cartproduct = useSelector((state) => state.product);
   const [modalVisible, setModalVisible] = useState(false);
@@ -68,8 +68,10 @@ const ProductDetailScreen = ({ navigation, route }) => {
   });
 
   const handleDecreaseButton = useCallback((quantity) => {
-    if (quantity > 0) {
+    if (quantity > 1) {
       setQuantity(quantity - 1);
+    } else {
+
     }
   });
 
@@ -136,7 +138,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
   });
 
   useEffect(() => {
-    setQuantity(0);
+    setQuantity(1);
     setAvaiableQuantity(product.quantity);
     fetchWishlist();
     fetchDetail();
@@ -223,10 +225,11 @@ const ProductDetailScreen = ({ navigation, route }) => {
               <View style={styles.counterContainer}>
                 <View style={styles.counter}>
                   <TouchableOpacity
-                    style={styles.counterButtonContainer}
+                    style={{ ...styles.counterButtonContainer, opacity: quantity === 1 ? 0.5 : 1 }}
                     onPress={() => {
                       handleDecreaseButton(quantity);
                     }}
+                    disabled={quantity === 1}
                   >
                     <Text style={styles.counterButtonText}>-</Text>
                   </TouchableOpacity>

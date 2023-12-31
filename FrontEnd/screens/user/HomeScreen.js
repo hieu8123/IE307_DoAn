@@ -305,6 +305,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-evenly",
+    elevation: 1,
   },
   inputContainer: {
     width: "70%",
