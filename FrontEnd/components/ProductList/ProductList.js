@@ -8,7 +8,7 @@ const ProductList = ({
   price,
   title,
   image,
-  qantity,
+  quantity,
   onPressView,
   onPressEdit,
   onPressDelete,
@@ -35,7 +35,7 @@ const ProductList = ({
           </View>
           <View style={styles.productInfoItem}>
             <Text style={styles.productInfoItemText}>SKU: </Text>
-            <Text>{qantity <= 0 ? "Out of Stock" : qantity}</Text>
+            <Text>{quantity <= 0 ? "Out of Stock" : quantity}</Text>
           </View>
         </View>
       </View>
